@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: 'jdbc:h2:file:./pigs;CASE_INSENSITIVE_IDENTIFIERS=true'
+    username: 'sa'
+    password: ''
+  main:
+    web-application-type: servlet
+
+---
+spring:
+  profiles: 'test'
+  datasource:
+    url: 'jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;CASE_INSENSITIVE_IDENTIFIERS=true'
