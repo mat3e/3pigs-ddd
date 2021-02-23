@@ -3,8 +3,8 @@ package io.github.mat3e.model;
 import io.github.mat3e.model.vo.Material;
 import io.github.mat3e.model.vo.Pig;
 
-@FunctionalInterface
-interface BuildingPolicy {
+// TODO: sealed doesn't work with Groovy 3.0.7
+/*sealed*/ interface BuildingPolicy {
     static BuildingPolicy chooseFor(Pig pig) {
         return switch (pig) {
             case VERY_LAZY -> new VeryLazyBuildingPolicy();
@@ -16,21 +16,21 @@ interface BuildingPolicy {
     Material chooseMaterial();
 }
 
-class VeryLazyBuildingPolicy implements BuildingPolicy {
+final class VeryLazyBuildingPolicy implements BuildingPolicy {
     @Override
     public Material chooseMaterial() {
         return Material.STRAW;
     }
 }
 
-class LazyBuildingPolicy implements BuildingPolicy {
+final class LazyBuildingPolicy implements BuildingPolicy {
     @Override
     public Material chooseMaterial() {
         return Material.WOOD;
     }
 }
 
-class SolidBuildingPolicy implements BuildingPolicy {
+final class SolidBuildingPolicy implements BuildingPolicy {
     @Override
     public Material chooseMaterial() {
         return Material.BRICKS;

@@ -13,7 +13,7 @@
     <description>A helper library for DDD</description>
 
     <properties>
-        <java.version>14</java.version>
+        <java.version>15</java.version>
 
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
