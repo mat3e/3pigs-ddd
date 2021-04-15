@@ -15,7 +15,7 @@
     <properties>
         <java.version>15</java.version>
         <groovy.version>3.0.7</groovy.version>
-        <spock.version>2.0-M4-groovy-3.0</spock.version>
+        <spock.version>2.0-M5-groovy-3.0</spock.version>
 
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>

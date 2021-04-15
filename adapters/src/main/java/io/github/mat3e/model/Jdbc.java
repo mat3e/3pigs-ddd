@@ -89,7 +89,7 @@ class HouseEntity {
     }
 }
 
-class Pigs {
+record Pigs(Pig first, Pig second, Pig third) {
     static Pigs fromList(final List<Pig> pigs) {
         var pigsArr = pigs.toArray(new Pig[0]);
         return switch (pigsArr.length) {
@@ -98,16 +98,6 @@ class Pigs {
             case 2 -> new Pigs(pigsArr[0], pigsArr[1], null);
             default -> new Pigs(pigsArr[0], pigsArr[1], pigsArr[2]);
         };
-    }
-
-    private final Pig first;
-    private final Pig second;
-    private final Pig third;
-
-    Pigs(final Pig first, final Pig second, final Pig third) {
-        this.first = first;
-        this.second = second;
-        this.third = third;
     }
 
     List<Pig> toList() {

@@ -2,7 +2,6 @@ package io.github.mat3e.in.rest;
 
 import io.github.mat3e.app.command.BuildHouse;
 import io.github.mat3e.model.vo.HouseId;
-import io.github.mat3e.model.vo.HouseSnapshot;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +15,7 @@ class RestConfiguration {
     Jackson2ObjectMapperBuilderCustomizer registerMixIns() {
         return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder
                 .mixIn(BuildHouse.class, BuildHouseJson.class)
-                .mixIn(HouseId.class, HouseIdJson.class)
-                .mixIn(HouseSnapshot.class, HouseSnapshotJson.class);
+                .mixIn(HouseId.class, HouseIdJson.class);
     }
 }
 

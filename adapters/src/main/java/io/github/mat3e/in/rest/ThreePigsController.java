@@ -1,12 +1,11 @@
 package io.github.mat3e.in.rest;
 
+import io.github.mat3e.app.HouseQueryRepository;
+import io.github.mat3e.app.HouseReadModel;
 import io.github.mat3e.app.ThreePigsCommandHandler;
 import io.github.mat3e.app.command.BlowDown;
 import io.github.mat3e.app.command.BuildHouse;
-import io.github.mat3e.model.House;
-import io.github.mat3e.model.HouseRepository;
 import io.github.mat3e.model.vo.HouseId;
-import io.github.mat3e.model.vo.HouseSnapshot;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +23,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 @RequestMapping("/houses")
 @ConditionalOnProperty(value = "spring.main.web-application-type", havingValue = "servlet")
 class ThreePigsController {
-    private final HouseRepository repository;
+    private final HouseQueryRepository repository;
     private final ThreePigsCommandHandler handler;
 
-    ThreePigsController(final HouseRepository repository, final ThreePigsCommandHandler handler) {
+    ThreePigsController(final HouseQueryRepository repository, final ThreePigsCommandHandler handler) {
         this.repository = repository;
         this.handler = handler;
     }
@@ -43,10 +42,9 @@ class ThreePigsController {
     }
 
     @GetMapping("/{value}")
-    ResponseEntity<EntityModel<HouseSnapshot>> readHouse(@PathVariable("value") HouseId id) {
+    ResponseEntity<EntityModel<HouseReadModel>> readHouse(@PathVariable("value") HouseId id) {
         return ResponseEntity.of(
-                repository.findById(id)
-                        .map(House::getSnapshot)
+                repository.findDirect(id)
                         .map(EntityModel::of)
         );
     }
