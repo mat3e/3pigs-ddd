@@ -20,6 +20,16 @@ open class ThreePigsCommandHandler(
         private val factory: HouseFactory,
         private val wolf: BigBadWolfService
 ) {
+    open fun tellTheStory(): List<HouseId> {
+        val firstHouse: HouseId = this handle BuildHouse(Pig.VERY_LAZY)
+        val secondHouse: HouseId = this handle BuildHouse(Pig.LAZY)
+        val thirdHouse: HouseId = this handle BuildHouse(Pig.NOT_LAZY)
+        this handle BlowDown(firstHouse)
+        this handle BlowDown(secondHouse)
+        this handle BlowDown(thirdHouse)
+        return listOf(firstHouse, secondHouse, thirdHouse)
+    }
+
     open infix fun handle(command: ThreePigsCommand): HouseId {
         val house: House = when (command) {
             is BuildHouse -> command.run {
