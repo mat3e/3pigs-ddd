@@ -3,8 +3,7 @@ package io.github.mat3e.model;
 import io.github.mat3e.model.vo.Material;
 import io.github.mat3e.model.vo.Pig;
 
-// TODO: sealed doesn't work with Groovy 3.0.7
-/*sealed*/ interface BuildingPolicy {
+sealed interface BuildingPolicy {
     static BuildingPolicy chooseFor(Pig pig) {
         return switch (pig) {
             case VERY_LAZY -> new VeryLazyBuildingPolicy();
