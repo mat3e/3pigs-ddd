@@ -1,6 +1,7 @@
 package io.github.mat3e.model
 
 import io.github.mat3e.model.event.HouseAbandoned
+import io.github.mat3e.model.vo.HouseId
 import io.github.mat3e.model.vo.HouseSnapshot
 import io.github.mat3e.model.vo.Pig
 import spock.lang.Specification
@@ -24,7 +25,7 @@ class HouseSpec extends Specification implements HouseHelpers {
         def snapshot = new HouseSnapshot(randomId(), material, pigs)
 
         when:
-        House result = House.from snapshot
+        def result = House.from snapshot
 
         then:
         with(result.snapshot) {
@@ -94,7 +95,7 @@ class HouseSpec extends Specification implements HouseHelpers {
     @Unroll('#material')
     def 'should get blown down when from'() {
         given:
-        def id = randomId()
+        HouseId id = randomId()
         def house = House.from(new HouseSnapshot(id, material, [LAZY]))
         def before = Instant.now()
 
@@ -120,13 +121,47 @@ class HouseSpec extends Specification implements HouseHelpers {
 
     def 'should NOT get blown down when from BRICKS'() {
         given:
-        House house = House.from(new HouseSnapshot(randomId(), BRICKS, [NOT_LAZY]))
+        def house = House.from(new HouseSnapshot(randomId(), BRICKS, [NOT_LAZY]))
 
         when:
         house.handleHurricane()
 
         then:
         thrown House.IndestructibleHouseException
+    }
+
+    def 'should get blown down when from BRICKS and with an overridden specification'() {
+        given:
+        HouseId id = randomId()
+        def house = House.from(new HouseSnapshot(id, BRICKS, [LAZY]))
+        def before = Instant.now()
+        and:
+        BlowingDownPossibility original = House.CAN_BE_BLOWN_DOWN
+        House.CAN_BE_BLOWN_DOWN = new BlowingDownPossibility() {
+            @Override
+            boolean isSatisfiedBy(final House houseToTest) {
+                return true
+            }
+        }
+
+        when:
+        house.handleHurricane()
+
+        then:
+        with(house.snapshot) {
+            it.pigs().size() == 0
+            with(it.events()) {
+                size() == 1
+                it[0].occurredOn().isAfter(before)
+                it[0].occurredOn().isBefore(Instant.now())
+                it[0] instanceof HouseAbandoned
+                (it[0] as HouseAbandoned).house() == id
+                (it[0] as HouseAbandoned).refugees() == [LAZY]
+            }
+        }
+
+        cleanup:
+        House.CAN_BE_BLOWN_DOWN = original
     }
 
     private static House houseWith(List<Pig> pigs) {

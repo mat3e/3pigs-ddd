@@ -17,8 +17,7 @@ import java.util.Objects;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 public class House implements Aggregate<HouseId, HouseSnapshot> {
-    // should be rather set in BigBadWolfService's constructor and used there together with a part of handleHurricane method
-    private static final BlowingDownPossibility blowingDownPossibility = new BlowingDownPossibility();
+    static BlowingDownPossibility CAN_BE_BLOWN_DOWN = new BlowingDownPossibility();
 
     static House from(final HouseSnapshot snapshot) {
         return new House(snapshot.id(), snapshot.material(), snapshot.pigs(), snapshot.events());
@@ -50,7 +49,7 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
     }
 
     void handleHurricane() {
-        if (!blowingDownPossibility.isSatisfiedBy(this)) {
+        if (!CAN_BE_BLOWN_DOWN.isSatisfiedBy(this)) {
             throw new IndestructibleHouseException();
         }
         eventsToPublish.add(new HouseAbandoned(id, tenants.getSnapshot()));

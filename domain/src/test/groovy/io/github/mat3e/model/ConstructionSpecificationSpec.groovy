@@ -11,7 +11,7 @@ class ConstructionSpecificationSpec extends Specification implements HouseHelper
     @Unroll('#inputMaterial')
     def 'should pass for material as in specification'() {
         given:
-        def house = houseFrom inputMaterial
+        House house = houseFrom inputMaterial
 
         expect:
         new ConstructionSpecification(inputMaterial).isSatisfiedBy(house)
@@ -23,7 +23,7 @@ class ConstructionSpecificationSpec extends Specification implements HouseHelper
     @Unroll('house from #inputMaterial vs. #resource')
     def 'should fail for material different than in specification'() {
         given:
-        def house = houseFrom inputMaterial
+        House house = houseFrom inputMaterial
 
         expect:
         !new ConstructionSpecification(resource).isSatisfiedBy(house)

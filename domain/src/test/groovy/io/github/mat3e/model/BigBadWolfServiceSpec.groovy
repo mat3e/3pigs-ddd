@@ -20,7 +20,7 @@ class BigBadWolfServiceSpec extends Specification implements HouseHelpers {
     @Unroll('#input')
     def 'should blow down house from'() {
         given:
-        def house = houseFrom input
+        House house = houseFrom input
         house.letIn LAZY
 
         expect:
