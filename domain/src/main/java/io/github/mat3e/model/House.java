@@ -31,12 +31,12 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
     private House(final HouseId id, final Material material, final List<Pig> pigs, final List<HouseEvent> events) {
         this.id = id;
         this.material = material;
-        pigs.forEach(tenants::append);
+        pigs.forEach(tenants::welcome);
         eventsToPublish.addAll(events);
     }
 
     public void letIn(final Pig guest) {
-        tenants.append(guest);
+        tenants.welcome(guest);
     }
 
     public void runBrainstorming() {
@@ -52,8 +52,7 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
         if (!CAN_BE_BLOWN_DOWN.isSatisfiedBy(this)) {
             throw new IndestructibleHouseException();
         }
-        eventsToPublish.add(new HouseAbandoned(id, tenants.getSnapshot()));
-        tenants.clear();
+        eventsToPublish.add(new HouseAbandoned(id, tenants.takeCover()));
     }
 
     @Override
@@ -64,7 +63,7 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
     private static class Pigs3 extends AbstractList<Pig> {
         private final Pig[] wrappedPigs = new Pig[3];
 
-        int append(final Pig pig) {
+        int welcome(final Pig pig) {
             for (int i = 0; i < wrappedPigs.length; ++i) {
                 if (wrappedPigs[i] == null) {
                     wrappedPigs[i] = pig;
@@ -72,6 +71,12 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
                 }
             }
             throw new TooManyPigsException(wrappedPigs.length);
+        }
+
+        List<Pig> takeCover() {
+            List<Pig> result = getSnapshot();
+            clear();
+            return result;
         }
 
         List<Pig> getSnapshot() {

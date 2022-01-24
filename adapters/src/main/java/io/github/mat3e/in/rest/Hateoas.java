@@ -1,7 +1,8 @@
 package io.github.mat3e.in.rest;
 
+import io.github.mat3e.app.HouseReadModel;
 import io.github.mat3e.app.command.BuildHouse;
-import io.github.mat3e.model.vo.HouseSnapshot;
+import io.github.mat3e.model.vo.HouseId;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -12,13 +13,13 @@ import org.springframework.http.HttpMethod;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-class HouseProcessor implements RepresentationModelProcessor<EntityModel<HouseSnapshot>> {
+class HouseProcessor implements RepresentationModelProcessor<EntityModel<HouseReadModel>> {
     @NotNull
     @Override
-    public EntityModel<HouseSnapshot> process(@NotNull final EntityModel<HouseSnapshot> model) {
+    public EntityModel<HouseReadModel> process(@NotNull final EntityModel<HouseReadModel> model) {
         return model.add(
                 Affordances.of(
-                        linkTo(methodOn(ThreePigsController.class).readHouse(model.getContent().id())).withSelfRel())
+                        linkTo(methodOn(ThreePigsController.class).readHouse(HouseId.of(model.getContent().getId()))).withSelfRel())
                         .afford(HttpMethod.DELETE)
                         .withName("blowHouseDown")
                         .andAfford(HttpMethod.POST)
