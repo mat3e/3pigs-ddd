@@ -15,8 +15,8 @@
     <description>The Three Little Pigs - application</description>
 
     <properties>
-        <java.version>15</java.version>
-        <kotlin.version>1.5.31</kotlin.version>
+        <java.version>17</java.version>
+        <kotlin.version>1.6.10</kotlin.version>
     </properties>
 
     <dependencies>

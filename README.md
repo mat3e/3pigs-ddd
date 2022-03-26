@@ -3,7 +3,7 @@
 
 [My tech talk](https://github.com/mat3e/talks/tree/master/docs/3pigs), fairy tale sources: [1](https://www.gillbooks.ie/AcuCustom/Sitename/DAM/101/WWSI_OM_0902.pdf), [2](http://www.hellokids.com/c_14958/reading-learning/stories-for-children/animal-stories-for-kids/the-three-little-pigs), [3](https://sacred-texts.com/neu/eng/eft/eft15.htm), [4](https://americanliterature.com/childrens-stories/the-three-little-pigs).
 
-> Java 15, Groovy + Spock, Kotlin, Maven, Spring
+> Java 17, Groovy + Spock, Kotlin, Maven, Spring
 
 ## Web app
 App starts as an ordinary web app for
@@ -47,8 +47,7 @@ An example.
 ![Design Level](./es2.jpg)
 
 ## Possible improvements
-* `House` can contain info that is destroyed (currently there are just no pigs inside)
-   * Add mechanisms for rebuilding the house
+* `House` could have mechanisms for rebuilding
 * `BlowingDownPossibility` could be injected to the `BigBadWolfService` and its `blowDown` method should use it to allow dynamic changes
 * Story can be extended - currently there is nothing about wolf climbing through the chimney and pigs lighting the fire
    * New `House` method, e.g. `litFire`

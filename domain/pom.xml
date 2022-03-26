@@ -13,9 +13,9 @@
     <description>The Three Little Pigs - domain</description>
 
     <properties>
-        <java.version>15</java.version>
-        <groovy.version>3.0.9</groovy.version>
-        <spock.version>2.1-M2-groovy-3.0</spock.version>
+        <java.version>17</java.version>
+        <groovy.version>4.0.1</groovy.version>
+        <spock.version>2.2-M1-groovy-4.0</spock.version>
 
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
@@ -42,7 +42,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.codehaus.groovy</groupId>
+            <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy.version}</version>
             <type>pom</type>
@@ -58,17 +58,6 @@
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.codehaus.groovy</groupId>
-                    <artifactId>groovy</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.spockframework</groupId>
-            <artifactId>spock-junit4</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -82,7 +71,7 @@
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
-                <version>1.12.1</version>
+                <version>1.13.1</version>
                 <configuration>
                     <previewFeatures>true</previewFeatures>
                 </configuration>

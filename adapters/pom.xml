@@ -15,7 +15,7 @@
     <description>The Three Little Pigs - adapters</description>
 
     <properties>
-        <java.version>15</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
