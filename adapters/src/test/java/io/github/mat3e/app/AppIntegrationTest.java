@@ -22,7 +22,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
-@SpringBootTest(webEnvironment = NONE, properties = "server.port=9999")
+@SpringBootTest(webEnvironment = NONE, properties = "server.port=9997")
 @Tag("integration")
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
