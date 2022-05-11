@@ -25,7 +25,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = NONE, properties = "server.port=9997")
 @Tag("integration")
 @ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
 class AppIntegrationTest {
     @Autowired
     private HouseRepository domainRepository;

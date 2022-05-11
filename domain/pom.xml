@@ -14,7 +14,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <groovy.version>4.0.1</groovy.version>
+        <groovy.version>4.0.2</groovy.version>
         <spock.version>2.2-M1-groovy-4.0</spock.version>
 
         <encoding>UTF-8</encoding>

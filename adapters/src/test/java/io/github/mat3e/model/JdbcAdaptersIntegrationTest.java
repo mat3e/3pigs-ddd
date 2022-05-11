@@ -28,7 +28,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = NONE)
 @Tag("integration")
 @ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
 class JdbcAdaptersIntegrationTest {
     @Autowired
     private HouseRepository domainRepository;
