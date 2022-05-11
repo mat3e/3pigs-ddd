@@ -57,7 +57,7 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
 
     @Override
     public HouseSnapshot getSnapshot() {
-        return new HouseSnapshot(id, material, tenants.getSnapshot(), eventsToPublish.stream().collect(toUnmodifiableList()));
+        return new HouseSnapshot(id, material, tenants.getSnapshot(), eventsToPublish.stream().toList());
     }
 
     private static class Pigs3 extends AbstractList<Pig> {
