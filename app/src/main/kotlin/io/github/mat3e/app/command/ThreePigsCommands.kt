@@ -12,7 +12,8 @@ data class BuildHouse(val owner: Pig) : ThreePigsCommand()
 sealed class UpdateCommand(val id: HouseId) : ThreePigsCommand() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is UpdateCommand) return false
+        if (javaClass != other?.javaClass) return false
+        other as UpdateCommand
         if (id != other.id) return false
         return true
     }
