@@ -8,13 +8,10 @@ import io.github.mat3e.model.vo.HouseSnapshot;
 import io.github.mat3e.model.vo.Material;
 import io.github.mat3e.model.vo.Pig;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-import static java.util.stream.Collectors.toUnmodifiableList;
 
 public class House implements Aggregate<HouseId, HouseSnapshot> {
     static BlowingDownPossibility CAN_BE_BLOWN_DOWN = new BlowingDownPossibility();
@@ -25,7 +22,7 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
 
     private final HouseId id;
     private final Material material;
-    private final Pigs3 tenants = new Pigs3();
+    private final Pigs tenants = new Pigs(3);
     private final List<HouseEvent> eventsToPublish = new ArrayList<>();
 
     private House(final HouseId id, final Material material, final List<Pig> pigs, final List<HouseEvent> events) {
@@ -40,12 +37,7 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
     }
 
     public void runBrainstorming() {
-        for (int i = 0; i < tenants.size(); ++i) {
-            final Pig pig;
-            if ((pig = tenants.get(i)) != null) {
-                tenants.set(i, pig.learnFromMistakes());
-            }
-        }
+        tenants.runBrainstorming();
     }
 
     void handleHurricane() {
@@ -60,17 +52,16 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
         return new HouseSnapshot(id, material, tenants.getSnapshot(), eventsToPublish.stream().toList());
     }
 
-    private static class Pigs3 extends AbstractList<Pig> {
-        private final Pig[] wrappedPigs = new Pig[3];
+    private static class Pigs /*implements DomainEntity*/ {
+        private final Pig[] spots;
 
-        int welcome(final Pig pig) {
-            for (int i = 0; i < wrappedPigs.length; ++i) {
-                if (wrappedPigs[i] == null) {
-                    wrappedPigs[i] = pig;
-                    return i;
-                }
-            }
-            throw new TooManyPigsException(wrappedPigs.length);
+        Pigs(final int max) {
+            spots = new Pig[max];
+        }
+
+        void welcome(final Pig pig) {
+            assertHasFreeSpots();
+            spots[firstEmptySpotNumber()] = pig;
         }
 
         List<Pig> takeCover() {
@@ -79,36 +70,45 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
             return result;
         }
 
+        void runBrainstorming() {
+            for (int i = 0; i < maxAvailableSpots(); ++i) {
+                spots[i] = learnFromMistakes(spots[i]);
+            }
+        }
+
         List<Pig> getSnapshot() {
-            return stream()
-                    .filter(Objects::nonNull)
-                    .collect(toUnmodifiableList());
+            return Arrays.stream(spots).filter(Objects::nonNull).toList();
         }
 
-        @Override
-        public Pig get(final int index) {
-            return wrappedPigs[index];
+        private void assertHasFreeSpots() {
+            if (firstEmptySpotNumber() >= maxAvailableSpots()) {
+                throw new TooManyPigsException(maxAvailableSpots());
+            }
         }
 
-        @Override
-        public Pig set(final int index, final Pig pig) {
-            Pig old = wrappedPigs[index];
-            wrappedPigs[index] = pig;
-            return old;
+        private int firstEmptySpotNumber() {
+            for (int i = 0; i < maxAvailableSpots(); ++i) {
+                if (spots[i] == null) {
+                    return i;
+                }
+            }
+            return maxAvailableSpots();
         }
 
-        @Override
-        public void clear() {
-            Arrays.fill(wrappedPigs, null);
+        private int maxAvailableSpots() {
+            return spots.length;
         }
 
-        @Override
-        public int size() {
-            return wrappedPigs.length;
+        private void clear() {
+            Arrays.fill(spots, null);
+        }
+
+        private Pig learnFromMistakes(final Pig original) {
+            return original == null ? null : original.learnFromMistakes();
         }
     }
 
-    public static class TooManyPigsException extends RuntimeException {
+    static class TooManyPigsException extends RuntimeException {
         TooManyPigsException(final int limit) {
             super("No more than " + limit + " pigs allowed in the house");
         }
