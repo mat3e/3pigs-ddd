@@ -72,7 +72,7 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
 
         void runBrainstorming() {
             for (int i = 0; i < maxAvailableSpots(); ++i) {
-                spots[i] = learnFromMistakes(spots[i]);
+                spots[i] = Pig.learnFromMistakes(spots[i]);
             }
         }
 
@@ -101,10 +101,6 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
 
         private void clear() {
             Arrays.fill(spots, null);
-        }
-
-        private Pig learnFromMistakes(final Pig original) {
-            return original == null ? null : original.learnFromMistakes();
         }
     }
 

@@ -12,7 +12,7 @@ class PigSpec extends Specification {
     @Unroll('from #start to #end')
     def 'should change their mind'() {
         expect:
-        start.learnFromMistakes() == end
+        Pig.learnFromMistakes(start) == end
 
         where:
         start     | end
@@ -23,9 +23,9 @@ class PigSpec extends Specification {
     @Unroll('#pig')
     def 'should remain unchanged'() {
         expect:
-        pig.learnFromMistakes() == pig
+        Pig.learnFromMistakes(pig) == pig
 
         where:
-        pig << [NOT_LAZY, NOT_LAZY_ANYMORE]
+        pig << [NOT_LAZY, NOT_LAZY_ANYMORE, null]
     }
 }
