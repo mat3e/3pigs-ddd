@@ -43,8 +43,11 @@ An example.
 ### Big Picture
 ![Big Picture](./es.jpg)
 
-### Design Level
-![Design Level](./es2.jpg)
+### Design Level - commands, rules & actors
+![Design Level rules](./es2.jpg)
+
+### Design Level - naming aggregates
+![Design Level aggregates](./es3.jpg)
 
 ## Possible improvements
 * `House` could have mechanisms for rebuilding
