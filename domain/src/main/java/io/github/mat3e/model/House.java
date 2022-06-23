@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class House implements Aggregate<HouseId, HouseSnapshot> {
-    static BlowingDownPossibility CAN_BE_BLOWN_DOWN = new BlowingDownPossibility();
+    static BlowingDownPossibility CAN_BE_BLOWN_DOWN = BlowingDownPossibility.defaultSpec();
 
     static House from(final HouseSnapshot snapshot) {
         return new House(snapshot.id(), snapshot.material(), snapshot.pigs(), snapshot.events());

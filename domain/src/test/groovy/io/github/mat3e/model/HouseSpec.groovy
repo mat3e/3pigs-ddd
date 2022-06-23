@@ -9,13 +9,8 @@ import spock.lang.Unroll
 
 import java.time.Instant
 
-import static io.github.mat3e.model.vo.Material.BRICKS
-import static io.github.mat3e.model.vo.Material.STRAW
-import static io.github.mat3e.model.vo.Material.WOOD
-import static io.github.mat3e.model.vo.Pig.LAZY
-import static io.github.mat3e.model.vo.Pig.NOT_LAZY
-import static io.github.mat3e.model.vo.Pig.NOT_LAZY_ANYMORE
-import static io.github.mat3e.model.vo.Pig.VERY_LAZY
+import static io.github.mat3e.model.vo.Material.*
+import static io.github.mat3e.model.vo.Pig.*
 
 class HouseSpec extends Specification implements HouseHelpers {
     def 'should restore House from snapshot'() {
@@ -137,12 +132,7 @@ class HouseSpec extends Specification implements HouseHelpers {
         def before = Instant.now()
         and:
         BlowingDownPossibility original = House.CAN_BE_BLOWN_DOWN
-        House.CAN_BE_BLOWN_DOWN = new BlowingDownPossibility() {
-            @Override
-            boolean isSatisfiedBy(final House houseToTest) {
-                return true
-            }
-        }
+        House.CAN_BE_BLOWN_DOWN = houseToTest -> true
 
         when:
         house.handleHurricane()

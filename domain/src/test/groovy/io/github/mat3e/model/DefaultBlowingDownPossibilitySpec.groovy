@@ -8,14 +8,14 @@ import static io.github.mat3e.model.vo.Material.BRICKS
 import static io.github.mat3e.model.vo.Material.STRAW
 import static io.github.mat3e.model.vo.Material.WOOD
 
-class BlowingDownPossibilitySpec extends Specification implements HouseHelpers {
+class DefaultBlowingDownPossibilitySpec extends Specification implements HouseHelpers {
     @Subject
-    def specification = new BlowingDownPossibility()
+    def specification = BlowingDownPossibility.defaultSpec()
 
     @Unroll('#inputMaterial')
     def 'should pass for'() {
         expect:
-        specification.isSatisfiedBy(houseFrom(inputMaterial))
+        specification.isSatisfiedBy houseFrom(inputMaterial)
 
         where:
         inputMaterial << [STRAW, WOOD]

@@ -6,13 +6,23 @@ import io.github.mat3e.model.vo.Material;
 import static io.github.mat3e.model.vo.Material.STRAW;
 import static io.github.mat3e.model.vo.Material.WOOD;
 
-class BlowingDownPossibility implements Specification<House> {
-    private final ConstructionSpecification strawConstruction = new ConstructionSpecification(STRAW);
-    private final ConstructionSpecification woodenConstruction = new ConstructionSpecification(WOOD);
+@FunctionalInterface
+interface BlowingDownPossibility extends Specification<House> {
+    static BlowingDownPossibility defaultSpec() {
+        return new DefaultImpl();
+    }
 
-    @Override
-    public boolean test(final House houseToTest) {
-        return strawConstruction.or(woodenConstruction).test(houseToTest);
+    final class DefaultImpl implements BlowingDownPossibility {
+        private final ConstructionSpecification strawConstruction = new ConstructionSpecification(STRAW);
+        private final ConstructionSpecification woodenConstruction = new ConstructionSpecification(WOOD);
+
+        @Override
+        public boolean test(final House houseToTest) {
+            return strawConstruction.or(woodenConstruction).test(houseToTest);
+        }
+
+        private DefaultImpl() {
+        }
     }
 }
 
