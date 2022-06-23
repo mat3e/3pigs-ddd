@@ -51,7 +51,7 @@ class HouseSpec extends Specification implements HouseHelpers {
         house.letIn LAZY
 
         then:
-        house.snapshot.pigs().contains(LAZY)
+        house.snapshot.pigs() contains LAZY
 
         where:
         // noinspection GroovyAssignabilityCheck
@@ -91,7 +91,7 @@ class HouseSpec extends Specification implements HouseHelpers {
     def 'should get blown down when from'() {
         given:
         HouseId id = randomId()
-        def house = House.from(new HouseSnapshot(id, material, [LAZY]))
+        def house = House.from new HouseSnapshot(id, material, [LAZY])
         def before = Instant.now()
 
         when:
@@ -102,8 +102,8 @@ class HouseSpec extends Specification implements HouseHelpers {
             it.pigs().size() == 0
             with(it.events()) {
                 size() == 1
-                it[0].occurredOn().isAfter(before)
-                it[0].occurredOn().isBefore(Instant.now())
+                it[0].occurredOn() isAfter before
+                it[0].occurredOn() isBefore Instant.now()
                 it[0] instanceof HouseAbandoned
                 (it[0] as HouseAbandoned).house() == id
                 (it[0] as HouseAbandoned).refugees() == [LAZY]
@@ -116,7 +116,7 @@ class HouseSpec extends Specification implements HouseHelpers {
 
     def 'should NOT get blown down when from BRICKS'() {
         given:
-        def house = House.from(new HouseSnapshot(randomId(), BRICKS, [NOT_LAZY]))
+        def house = House.from new HouseSnapshot(randomId(), BRICKS, [NOT_LAZY])
 
         when:
         house.handleHurricane()
@@ -128,7 +128,7 @@ class HouseSpec extends Specification implements HouseHelpers {
     def 'should get blown down when from BRICKS and with an overridden specification'() {
         given:
         HouseId id = randomId()
-        def house = House.from(new HouseSnapshot(id, BRICKS, [LAZY]))
+        def house = House.from new HouseSnapshot(id, BRICKS, [LAZY])
         def before = Instant.now()
         and:
         BlowingDownPossibility original = House.CAN_BE_BLOWN_DOWN
@@ -142,8 +142,8 @@ class HouseSpec extends Specification implements HouseHelpers {
             it.pigs().size() == 0
             with(it.events()) {
                 size() == 1
-                it[0].occurredOn().isAfter(before)
-                it[0].occurredOn().isBefore(Instant.now())
+                it[0].occurredOn() isAfter before
+                it[0].occurredOn() isBefore Instant.now()
                 it[0] instanceof HouseAbandoned
                 (it[0] as HouseAbandoned).house() == id
                 (it[0] as HouseAbandoned).refugees() == [LAZY]
@@ -155,6 +155,6 @@ class HouseSpec extends Specification implements HouseHelpers {
     }
 
     private static House houseWith(List<Pig> pigs) {
-        House.from(new HouseSnapshot(randomId(), BRICKS, pigs))
+        House.from new HouseSnapshot(randomId(), BRICKS, pigs)
     }
 }

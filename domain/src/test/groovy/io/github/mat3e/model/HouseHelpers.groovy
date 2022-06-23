@@ -8,7 +8,7 @@ import io.github.mat3e.model.vo.Material
 @TypeChecked
 trait HouseHelpers {
     static House houseFrom(Material material) {
-        return House.from(new HouseSnapshot(randomId(), material, [], []))
+        House.from new HouseSnapshot(randomId(), material, [], [])
     }
 
     static HouseId randomId() {

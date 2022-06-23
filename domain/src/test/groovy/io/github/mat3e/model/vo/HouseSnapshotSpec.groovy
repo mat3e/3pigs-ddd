@@ -9,6 +9,6 @@ class HouseSnapshotSpec extends Specification {
 
         then:
         def e = thrown NullPointerException
-        e.message.contains('HouseId')
+        e.message.contains 'HouseId'
     }
 }

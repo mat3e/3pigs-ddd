@@ -19,7 +19,7 @@ class HouseFactorySpec extends Specification {
     @Unroll('#material house for a #motivation pig')
     def 'should build a proper, new house for a given pig'() {
         given:
-        House house = factory.buildFor(motivation)
+        House house = factory.buildFor motivation
 
         expect:
         with(house.snapshot) {

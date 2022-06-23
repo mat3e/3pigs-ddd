@@ -3,9 +3,7 @@ package io.github.mat3e.model
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static io.github.mat3e.model.vo.Material.BRICKS
-import static io.github.mat3e.model.vo.Material.STRAW
-import static io.github.mat3e.model.vo.Material.WOOD
+import static io.github.mat3e.model.vo.Material.*
 
 class ConstructionSpecificationSpec extends Specification implements HouseHelpers {
     @Unroll('#inputMaterial')
@@ -14,7 +12,7 @@ class ConstructionSpecificationSpec extends Specification implements HouseHelper
         House house = houseFrom inputMaterial
 
         expect:
-        new ConstructionSpecification(inputMaterial).isSatisfiedBy(house)
+        new ConstructionSpecification(inputMaterial).isSatisfiedBy house
 
         where:
         inputMaterial << [BRICKS, STRAW, WOOD]
