@@ -7,7 +7,7 @@ public class BigBadWolfService {
     private final DomainEventPublisher eventPublisher;
     private final BlowingDownSpecification canBeBlownDown;
 
-    BigBadWolfService(final DomainEventPublisher eventPublisher) {
+    public BigBadWolfService(final DomainEventPublisher eventPublisher) {
         this(eventPublisher, BlowingDownSpecification.defaultSpec());
     }
 

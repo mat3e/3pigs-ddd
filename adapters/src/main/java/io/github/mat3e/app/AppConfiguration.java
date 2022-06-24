@@ -1,7 +1,6 @@
 package io.github.mat3e.app;
 
-import io.github.mat3e.model.BigBadWolfService;
-import io.github.mat3e.model.HouseFactory;
+import io.github.mat3e.ddd.event.DomainEventPublisher;
 import io.github.mat3e.model.HouseRepository;
 import io.github.mat3e.model.event.HouseEvent;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -12,11 +11,17 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 class AppConfiguration {
+    private final ThreePigsApp app;
+
+    AppConfiguration(final HouseRepository repository, final DomainEventPublisher eventPublisher, final HouseQueryRepository queryRepository) {
+        app = new ThreePigsApp(repository, eventPublisher, queryRepository);
+    }
+
     @Bean
-    ThreePigsCommandHandler commandHandler(final HouseRepository repository, final BigBadWolfService wolf) {
-        return new ThreePigsCommandHandler(repository, new HouseFactory(), wolf);
+    ThreePigsCommandHandler commandHandler() {
+        return app.getCommandHandler();
     }
 }
 
@@ -24,6 +29,7 @@ class AppConfiguration {
 class EventConfiguration {
     private final ThreePigsEventHandler eventHandler;
 
+    // allows overriding ThreePigsCommandHandler as ThreePigsApp#getEventHandler already has a hardcoded ThreePigsCommandHandler
     EventConfiguration(final HouseQueryRepository queryRepository, final ThreePigsCommandHandler commandHandler) {
         this.eventHandler = new ThreePigsEventHandler(queryRepository, commandHandler);
     }

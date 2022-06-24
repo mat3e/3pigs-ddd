@@ -5,8 +5,12 @@ import io.github.mat3e.app.command.BlowDown;
 import io.github.mat3e.app.command.BuildHouse;
 import io.github.mat3e.model.vo.Pig;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
 
+@Service
+@ConditionalOnProperty(value = "spring.main.web-application-type", havingValue = "none")
 class FairyTaleRunner implements CommandLineRunner {
     private final ThreePigsCommandHandler handler;
     private final JdbcTemplate jdbcTemplate;
