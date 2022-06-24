@@ -8,9 +8,9 @@ import static io.github.mat3e.model.vo.Material.BRICKS
 import static io.github.mat3e.model.vo.Material.STRAW
 import static io.github.mat3e.model.vo.Material.WOOD
 
-class DefaultBlowingDownPossibilitySpec extends Specification implements HouseHelpers {
+class DefaultBlowingDownSpecificationSpec extends Specification implements HouseHelpers {
     @Subject
-    def specification = BlowingDownPossibility.defaultSpec()
+    def specification = BlowingDownSpecification.defaultSpec()
 
     @Unroll('#inputMaterial')
     def 'should pass for'() {

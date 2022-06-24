@@ -7,12 +7,12 @@ import static io.github.mat3e.model.vo.Material.STRAW;
 import static io.github.mat3e.model.vo.Material.WOOD;
 
 @FunctionalInterface
-interface BlowingDownPossibility extends Specification<House> {
-    static BlowingDownPossibility defaultSpec() {
+interface BlowingDownSpecification extends Specification<House> {
+    static BlowingDownSpecification defaultSpec() {
         return new DefaultImpl();
     }
 
-    final class DefaultImpl implements BlowingDownPossibility {
+    final class DefaultImpl implements BlowingDownSpecification {
         private final ConstructionSpecification strawConstruction = new ConstructionSpecification(STRAW);
         private final ConstructionSpecification woodenConstruction = new ConstructionSpecification(WOOD);
 

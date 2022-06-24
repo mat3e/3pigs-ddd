@@ -51,7 +51,6 @@ An example.
 
 ## Possible improvements
 * `House` could have mechanisms for rebuilding
-* `BlowingDownPossibility` could be injected to the `BigBadWolfService` and its `blowDown` method should use it to allow dynamic changes
 * Story can be extended - currently there is nothing about wolf climbing through the chimney and pigs lighting the fire
    * New `House` method, e.g. `litFire`
    * New `BigBadWolfService` method, e.g. `comeDownTheChimneyOf`

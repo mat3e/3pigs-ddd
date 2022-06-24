@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class House implements Aggregate<HouseId, HouseSnapshot> {
-    static BlowingDownPossibility CAN_BE_BLOWN_DOWN = BlowingDownPossibility.defaultSpec();
-
     static House from(final HouseSnapshot snapshot) {
         return new House(snapshot.id(), snapshot.material(), snapshot.pigs(), snapshot.events());
     }
@@ -40,8 +38,8 @@ public class House implements Aggregate<HouseId, HouseSnapshot> {
         tenants.runBrainstorming();
     }
 
-    void handleHurricane() {
-        if (!CAN_BE_BLOWN_DOWN.isSatisfiedBy(this)) {
+    void handleHurricane(final BlowingDownSpecification canBeBlownDown) {
+        if (!canBeBlownDown.isSatisfiedBy(this)) {
             throw new IndestructibleHouseException();
         }
         eventsToPublish.add(new HouseAbandoned(id, tenants.takeCover()));

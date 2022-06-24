@@ -1,15 +1,12 @@
 package io.github.mat3e.model
 
-import io.github.mat3e.model.event.HouseAbandoned
-import io.github.mat3e.model.vo.HouseId
+
 import io.github.mat3e.model.vo.HouseSnapshot
 import io.github.mat3e.model.vo.Pig
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import java.time.Instant
-
-import static io.github.mat3e.model.vo.Material.*
+import static io.github.mat3e.model.vo.Material.BRICKS
 import static io.github.mat3e.model.vo.Pig.*
 
 class HouseSpec extends Specification implements HouseHelpers {
@@ -87,71 +84,15 @@ class HouseSpec extends Specification implements HouseHelpers {
         [NOT_LAZY_ANYMORE, LAZY, NOT_LAZY] | [NOT_LAZY_ANYMORE, NOT_LAZY_ANYMORE, NOT_LAZY]
     }
 
-    @Unroll('#material')
-    def 'should get blown down when from'() {
-        given:
-        HouseId id = randomId()
-        def house = House.from new HouseSnapshot(id, material, [LAZY])
-        def before = Instant.now()
-
-        when:
-        house.handleHurricane()
-
-        then:
-        with(house.snapshot) {
-            it.pigs().size() == 0
-            with(it.events()) {
-                size() == 1
-                it[0].occurredOn() isAfter before
-                it[0].occurredOn() isBefore Instant.now()
-                it[0] instanceof HouseAbandoned
-                (it[0] as HouseAbandoned).house() == id
-                (it[0] as HouseAbandoned).refugees() == [LAZY]
-            }
-        }
-
-        where:
-        material << [STRAW, WOOD]
-    }
-
-    def 'should NOT get blown down when from BRICKS'() {
+    def 'should throw when handling hurricane and from BRICKS'() {
         given:
         def house = House.from new HouseSnapshot(randomId(), BRICKS, [NOT_LAZY])
 
         when:
-        house.handleHurricane()
+        house.handleHurricane BlowingDownSpecification.defaultSpec()
 
         then:
         thrown House.IndestructibleHouseException
-    }
-
-    def 'should get blown down when from BRICKS and with an overridden specification'() {
-        given:
-        HouseId id = randomId()
-        def house = House.from new HouseSnapshot(id, BRICKS, [LAZY])
-        def before = Instant.now()
-        and:
-        BlowingDownPossibility original = House.CAN_BE_BLOWN_DOWN
-        House.CAN_BE_BLOWN_DOWN = houseToTest -> true
-
-        when:
-        house.handleHurricane()
-
-        then:
-        with(house.snapshot) {
-            it.pigs().size() == 0
-            with(it.events()) {
-                size() == 1
-                it[0].occurredOn() isAfter before
-                it[0].occurredOn() isBefore Instant.now()
-                it[0] instanceof HouseAbandoned
-                (it[0] as HouseAbandoned).house() == id
-                (it[0] as HouseAbandoned).refugees() == [LAZY]
-            }
-        }
-
-        cleanup:
-        House.CAN_BE_BLOWN_DOWN = original
     }
 
     private static House houseWith(List<Pig> pigs) {
