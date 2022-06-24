@@ -16,8 +16,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toUnmodifiableList;
-
 @org.springframework.stereotype.Repository
 class HouseQueryRepositoryImpl implements HouseQueryRepository {
     private final JdbcHouseQueryRepository springRepository;
@@ -60,6 +58,6 @@ record Pigs(Pig first, Pig second, Pig third) {
     List<Pig> toList() {
         return Stream.of(first, second, third)
                 .filter(Objects::nonNull)
-                .collect(toUnmodifiableList());
+                .toList();
     }
 }

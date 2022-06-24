@@ -103,6 +103,6 @@ record Pigs(Pig first, Pig second, Pig third) {
     List<Pig> toList() {
         return Stream.of(first, second, third)
                 .filter(Objects::nonNull)
-                .collect(toUnmodifiableList());
+                .toList();
     }
 }
