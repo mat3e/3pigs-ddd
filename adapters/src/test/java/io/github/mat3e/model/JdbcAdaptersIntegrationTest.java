@@ -23,7 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
-@SpringBootTest(webEnvironment = NONE)
+@SpringBootTest(webEnvironment = NONE) // TODO: @DataJdbcTest(properties = "spring.main.web-application-type=none") - ?
 @Tag("integration")
 @ActiveProfiles("test")
 class JdbcAdaptersIntegrationTest {
