@@ -1,17 +1,13 @@
 package io.github.mat3e.out.logging;
 
+import io.github.mat3e.app.HouseQueryRepository;
+import io.github.mat3e.app.HouseReadModel;
 import io.github.mat3e.app.command.BuildHouse;
 import io.github.mat3e.model.House;
-import io.github.mat3e.model.HouseRepository;
 import io.github.mat3e.model.vo.HouseId;
-import io.github.mat3e.model.vo.HouseSnapshot;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -22,15 +18,15 @@ import java.util.Optional;
 @Component
 class LoggingAspect {
     private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
-    private final HouseRepository repository;
+    private final HouseQueryRepository repository;
 
-    LoggingAspect(final HouseRepository repository) {
+    LoggingAspect(final HouseQueryRepository repository) {
         this.repository = repository;
         logger.info("Once upon a time, there were three little pigs");
     }
 
-    @Pointcut("execution(* io.github.mat3e.app.ThreePigsCommandHandler.handle(..))")
-    static void handling() {
+    @Pointcut(value = "execution(* io.github.mat3e.app.ThreePigsCommandHandler.handle(..)) && args(command)", argNames = "command")
+    static void buildingHouse(BuildHouse command) {
     }
 
     @Pointcut("execution(void io.github.mat3e.model.BigBadWolfService.blowDown(..))")
@@ -41,31 +37,25 @@ class LoggingAspect {
     static void findingNearestHouse() {
     }
 
-    @Before("handling()")
-    void logBeforeHandling(JoinPoint jp) {
+    @Before(value = "buildingHouse(buildHouse)", argNames = "buildHouse")
+    void logBeforeHouseBuilding(BuildHouse buildHouse) {
         if (logger.isInfoEnabled()) {
-            var command = jp.getArgs()[0];
-            if (command instanceof BuildHouse buildCommand) {
-                switch (buildCommand.getOwner()) {
-                    case VERY_LAZY -> logger.info("The first little pig was very lazy");
-                    case LAZY -> logger.info("The second little pig was a bit more ambitious");
-                    case NOT_LAZY -> logger.info("The third little pig was ready for hard work");
-                }
+            switch (buildHouse.getOwner()) {
+                case VERY_LAZY -> logger.info("The first little pig was very lazy");
+                case LAZY -> logger.info("The second little pig was a bit more ambitious");
+                case NOT_LAZY -> logger.info("The third little pig was ready for hard work");
             }
         }
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent") // command was handled = there is a house
-    @AfterReturning(value = "handling()", returning = "id")
-    void logAfterHandling(JoinPoint jp, HouseId id) {
+    @AfterReturning(value = "buildingHouse(buildHouse)", returning = "id", argNames = "buildHouse,id")
+    void logAfterHouseBuilding(BuildHouse buildHouse, HouseId id) {
         if (logger.isInfoEnabled()) {
-            var command = jp.getArgs()[0];
-            if (command instanceof BuildHouse) {
-                switch (findHouse(id).get().material()) {
-                    case STRAW -> logger.info("He didn't want to work at all and he built his house out of straw");
-                    case WOOD -> logger.info("He built his house with sticks");
-                    case BRICKS -> logger.info("He chose to build his house from bricks");
-                }
+            switch (findHouse(id).get().getMaterial()) {
+                case STRAW -> logger.info("He didn't want to work at all and he built his house out of straw");
+                case WOOD -> logger.info("He built his house with sticks");
+                case BRICKS -> logger.info("He chose to build his house from bricks");
             }
         }
     }
@@ -112,7 +102,7 @@ class LoggingAspect {
         nearestHouse
                 .filter(ignored -> logger.isInfoEnabled())
                 .flatMap(this::findHouse)
-                .map(HouseSnapshot::material)
+                .map(HouseReadModel::getMaterial)
                 .ifPresent(material -> {
                     switch (material) {
                         case WOOD -> logger.info("The little pig escaped and ran to his brother's house of sticks");
@@ -121,7 +111,7 @@ class LoggingAspect {
                 });
     }
 
-    private Optional<HouseSnapshot> findHouse(HouseId id) {
-        return repository.findById(id).map(House::getSnapshot);
+    private Optional<HouseReadModel> findHouse(HouseId id) {
+        return repository.findDirect(id);
     }
 }
