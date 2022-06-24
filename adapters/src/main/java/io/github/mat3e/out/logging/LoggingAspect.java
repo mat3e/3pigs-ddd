@@ -2,11 +2,10 @@ package io.github.mat3e.out.logging;
 
 import io.github.mat3e.app.HouseQueryRepository;
 import io.github.mat3e.app.HouseReadModel;
+import io.github.mat3e.app.command.BlowDown;
 import io.github.mat3e.app.command.BuildHouse;
-import io.github.mat3e.model.House;
+import io.github.mat3e.model.event.WolfResignedFromAttacking;
 import io.github.mat3e.model.vo.HouseId;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +28,16 @@ class LoggingAspect {
     static void buildingHouse(BuildHouse command) {
     }
 
-    @Pointcut("execution(void io.github.mat3e.model.BigBadWolfService.blowDown(..))")
-    static void wolfBlowing() {
+    @Pointcut(value = "execution(* io.github.mat3e.app.ThreePigsCommandHandler.handle(..)) && args(command)", argNames = "command")
+    static void wolfBlowing(BlowDown command) {
     }
 
     @Pointcut("execution(* io.github.mat3e.app.HouseQueryRepository.findClosestTo(..))")
     static void findingNearestHouse() {
+    }
+
+    @Pointcut(value = "@annotation(org.springframework.context.event.EventListener) && args(event)", argNames = "event")
+    static void wolfResigning(WolfResignedFromAttacking event) {
     }
 
     @Before(value = "buildingHouse(buildHouse)", argNames = "buildHouse")
@@ -60,47 +63,35 @@ class LoggingAspect {
         }
     }
 
-    @Around("wolfBlowing()")
-    Object logInBlow(ProceedingJoinPoint jp) {
-        var houseMaterial = ((House) jp.getArgs()[0]).getSnapshot().material();
-        try {
+    @Before(value = "wolfBlowing(blowDown)", argNames = "blowDown")
+    void logInBlow(BlowDown blowDown) {
+        findHouse(blowDown.getId()).map(HouseReadModel::getMaterial).ifPresent(houseMaterial -> {
             if (logger.isInfoEnabled()) {
                 switch (houseMaterial) {
                     case STRAW -> logger.info("One night the big bad wolf, who dearly loved to eat fat little piggies, came along and saw the first little pig in his house of straw");
                     case WOOD -> logger.info("The wolf followed – excited that he might get to eat two little pigs");
                     case BRICKS -> logger.info("The wolf followed them and once he reached the house he began to shout");
                 }
-            }
-            var result = jp.proceed();
-            if (logger.isInfoEnabled()) {
                 switch (houseMaterial) {
                     case STRAW -> logger.info("He knocked on the door. 'Little pig, little pig, let me come in! Or I'll huff and I'll puff and I'll blow your house down!' called the wolf. The little pig felt safe in his house so he shouted back, 'Not by the hair on my chinny chin chin!'");
                     case WOOD, BRICKS -> logger.info("'Little pigs, little pigs let me come in! 'Or I'll huff and I'll puff and I'll blow your house down!'. 'Not by the hair on our chinny chin chins!'");
                 }
             }
-            return result;
-        } catch (Throwable e) {
-            if (e instanceof RuntimeException) {
-                throw (RuntimeException) e;
-            }
-            throw new RuntimeException(e);
-        } finally {
-            if (logger.isInfoEnabled()) {
-                switch (houseMaterial) {
-                    case STRAW, WOOD -> logger.info("The wolf huffed and he puffed and he blew the house down");
-                    case BRICKS -> {
-                        logger.info("The wolf huffed and he puffed and he huffed and he puffed but he could not blow the house down!");
-                        logger.info("The three little pigs never had any trouble from him again, they learnt from their mistakes and they all lived happily ever after");
-                    }
-                }
-            }
+        });
+
+    }
+
+    @Before("findingNearestHouse()")
+    void logBeforeEscaping() {
+        if (logger.isInfoEnabled()) {
+            logger.info("The wolf huffed and he puffed and he blew the house down");
         }
     }
 
     @AfterReturning(value = "findingNearestHouse()", returning = "nearestHouse")
-    void logAfterEscaping(JoinPoint jp, Optional<HouseId> nearestHouse) {
+    void logAfterEscaping(Optional<HouseId> nearestHouse) {
         nearestHouse
-                .filter(ignored -> logger.isInfoEnabled())
+                .filter(__ -> logger.isInfoEnabled())
                 .flatMap(this::findHouse)
                 .map(HouseReadModel::getMaterial)
                 .ifPresent(material -> {
@@ -109,6 +100,14 @@ class LoggingAspect {
                         case BRICKS -> logger.info("The two little pigs raced to their brother's house of bricks");
                     }
                 });
+    }
+
+    @After(value = "wolfResigning(resignation)", argNames = "resignation")
+    void logAfterResigning(WolfResignedFromAttacking resignation) {
+        if (logger.isInfoEnabled()) {
+            logger.info("The wolf huffed and he puffed and he huffed and he puffed, but he could not blow the house down!");
+            logger.info("The three little pigs never had any trouble from him again, they learnt from their mistakes and they all lived happily ever after");
+        }
     }
 
     private Optional<HouseReadModel> findHouse(HouseId id) {
