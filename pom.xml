@@ -19,7 +19,7 @@
         <module>domain</module>
         <module>app</module>
         <module>adapters</module>
-        <module>shared</module>
+        <module>lib</module>
     </modules>
 
     <build>

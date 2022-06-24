@@ -7,9 +7,10 @@
         <artifactId>3pigs</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>shared</artifactId>
+    <groupId>io.github.mat3e.ddd</groupId>
+    <artifactId>lib</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>shared</name>
+    <name>lib</name>
     <description>A helper library for DDD</description>
 
     <properties>

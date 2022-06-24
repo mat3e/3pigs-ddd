@@ -36,8 +36,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.mat3e</groupId>
-            <artifactId>shared</artifactId>
+            <groupId>io.github.mat3e.ddd</groupId>
+            <artifactId>lib</artifactId>
             <version>${project.version}</version>
         </dependency>
 
