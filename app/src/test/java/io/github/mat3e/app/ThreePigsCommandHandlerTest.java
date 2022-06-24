@@ -121,9 +121,7 @@ class ThreePigsCommandHandlerTest {
         // when
         toTest.handle(command);
 
-        then(repository)
-                .should(times(0))
-                .save(any(House.class));
+        then(repository).shouldHaveNoMoreInteractions();
     }
 
     static Stream<Arguments> updateCommand_notSavesIfNotNeeded() {
