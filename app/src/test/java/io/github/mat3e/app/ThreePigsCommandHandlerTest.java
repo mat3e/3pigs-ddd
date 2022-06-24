@@ -24,6 +24,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -84,7 +85,7 @@ class ThreePigsCommandHandlerTest {
 
     static Stream<Arguments> validCommand_shouldSaveUpdatedHouse() {
         return Stream.of(
-                arguments(new Enter(Pig.LAZY, HouseId.of(999))),
+                arguments(new Enter(List.of(Pig.LAZY), HouseId.of(999))),
                 arguments(new ShareKnowledge(HouseId.of(999)))
         );
     }
@@ -105,7 +106,7 @@ class ThreePigsCommandHandlerTest {
     static Stream<Arguments> updateCommand_throwsWhenNoHouse() {
         return Stream.of(
                 arguments(new BlowDown(HouseId.of(123))),
-                arguments(new Enter(Pig.LAZY, HouseId.of(456))),
+                arguments(new Enter(List.of(Pig.LAZY), HouseId.of(456))),
                 arguments(new ShareKnowledge(HouseId.of(789)))
         );
     }
@@ -127,7 +128,7 @@ class ThreePigsCommandHandlerTest {
     static Stream<Arguments> updateCommand_notSavesIfNotNeeded() {
         return Stream.of(
                 arguments(new BlowDown(HouseId.of(123))),
-                arguments(new Enter(Pig.LAZY, HouseId.of(456))),
+                arguments(new Enter(List.of(Pig.LAZY), HouseId.of(456))),
                 arguments(new ShareKnowledge(HouseId.of(789)))
         );
     }

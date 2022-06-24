@@ -1,7 +1,5 @@
 package io.github.mat3e.model;
 
-import io.github.mat3e.app.ThreePigsCommandHandler;
-import io.github.mat3e.app.command.Enter;
 import io.github.mat3e.model.event.HouseAbandoned;
 import io.github.mat3e.model.vo.HouseId;
 import io.github.mat3e.model.vo.HouseSnapshot;
@@ -12,15 +10,11 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
 @SpringBootTest(webEnvironment = NONE) // TODO: @DataJdbcTest(properties = "spring.main.web-application-type=none") - ?
@@ -30,9 +24,6 @@ class JdbcAdaptersIntegrationTest {
     @Autowired
     private HouseRepository domainRepository;
 
-    @MockBean
-    private ThreePigsCommandHandler commandHandler;
-
     @Test
     @DisplayName("should save, publish events and then read")
     void saveAndRead_worksAsExpected() {
@@ -41,7 +32,7 @@ class JdbcAdaptersIntegrationTest {
                 HouseId.empty(),
                 Material.WOOD,
                 List.of(Pig.LAZY, Pig.VERY_LAZY),
-                List.of(new HouseAbandoned(HouseId.empty(), List.of(Pig.NOT_LAZY, Pig.NOT_LAZY_ANYMORE)))
+                List.of(new HouseAbandoned(HouseId.of(555), List.of(Pig.NOT_LAZY, Pig.NOT_LAZY_ANYMORE)))
         );
 
         // when
@@ -54,7 +45,6 @@ class JdbcAdaptersIntegrationTest {
                 .usingRecursiveComparison()
                 .ignoringFields("id", "events")
                 .isEqualTo(snapshot);
-        verify(commandHandler, times(2))
-                .handle(any(Enter.class)); // house abandoned event with 2 pigs published
+        assertThat(result.events()).isEmpty();
     }
 }

@@ -13,14 +13,10 @@ class ThreePigsEventHandler(
     fun handle(event: HouseEvent) {
         when (event) {
             is HouseAbandoned -> event.run {
-                queryRepository.findClosestTo(house()).ifPresent { closestHouseId ->
-                    refugees().forEach { pig ->
-                        commandHandler handle Enter(pig, closestHouseId)
-                    }
-                }
-                // doesn't enter any house ~ eaten
+                queryRepository.findClosestTo(house).ifPresent { commandHandler handle Enter(refugees, it) }
+                // don't enter any house ~ eaten
             }
-            is WolfResignedFromAttacking -> commandHandler handle ShareKnowledge(event.house())
+            is WolfResignedFromAttacking -> event.run { commandHandler handle ShareKnowledge(house) }
         }
     }
 }

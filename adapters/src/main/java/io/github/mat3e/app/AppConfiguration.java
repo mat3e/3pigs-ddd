@@ -23,21 +23,11 @@ class AppConfiguration {
     ThreePigsCommandHandler commandHandler() {
         return app.getCommandHandler();
     }
-}
-
-@Configuration
-class EventConfiguration {
-    private final ThreePigsEventHandler eventHandler;
-
-    // allows overriding ThreePigsCommandHandler as ThreePigsApp#getEventHandler already has a hardcoded ThreePigsCommandHandler
-    EventConfiguration(final HouseQueryRepository queryRepository, final ThreePigsCommandHandler commandHandler) {
-        this.eventHandler = new ThreePigsEventHandler(queryRepository, commandHandler);
-    }
 
     @Async
     @EventListener
     public void on(final HouseEvent event) {
-        eventHandler.handle(event);
+        app.getEventHandler().handle(event);
     }
 }
 

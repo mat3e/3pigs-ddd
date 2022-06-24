@@ -1,12 +1,8 @@
 package io.github.mat3e.app;
 
 import io.github.mat3e.app.command.BlowDown;
-import io.github.mat3e.app.command.Enter;
-import io.github.mat3e.model.House;
-import io.github.mat3e.model.HouseFactory;
-import io.github.mat3e.model.HouseRepository;
+import io.github.mat3e.app.command.BuildHouse;
 import io.github.mat3e.model.vo.HouseId;
-import io.github.mat3e.model.vo.HouseSnapshot;
 import io.github.mat3e.model.vo.Pig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -25,54 +21,46 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @ActiveProfiles("test")
 class AppIntegrationTest {
     @Autowired
-    private HouseRepository domainRepository;
-
-    @Autowired
     private ThreePigsCommandHandler commandHandler;
 
-    @Test
-    @DisplayName("pigs should learn after wolf resigned")
-    void wolfResigned_causesPigsLearning() {
-        // given
-        HouseId savedId = domainRepository.save(
-                new HouseFactory()
-                        .buildFor(Pig.NOT_LAZY)
-        ).getSnapshot().id();
-        // and
-        commandHandler.handle(new Enter(Pig.LAZY, savedId));
-
-        // when
-        commandHandler.handle(new BlowDown(savedId));
-
-        // then
-        List<Pig> pigs = domainRepository.findById(savedId)
-                .map(House::getSnapshot)
-                .map(HouseSnapshot::pigs)
-                .get();
-        assertThat(pigs).containsOnly(Pig.NOT_LAZY, Pig.NOT_LAZY_ANYMORE);
-    }
+    @Autowired
+    private HouseQueryRepository queryRepository;
 
     @Test
     @DisplayName("pigs should escape to the nearest house")
     void houseDestroyed_causesPigsEscape() {
         // given
-        HouseId first = domainRepository.save(
-                new HouseFactory()
-                        .buildFor(Pig.VERY_LAZY)
-        ).getSnapshot().id();
-        HouseId second = domainRepository.save(
-                new HouseFactory()
-                        .buildFor(Pig.LAZY)
-        ).getSnapshot().id();
+        HouseId lazyPigHouseId = commandHandler.handle(new BuildHouse(Pig.VERY_LAZY));
+        // and
+        HouseId smartPigHouseId = commandHandler.handle(new BuildHouse(Pig.NOT_LAZY));
 
         // when
-        commandHandler.handle(new BlowDown(first));
+        commandHandler.handle(new BlowDown(lazyPigHouseId));
 
         // then
-        List<Pig> pigs = domainRepository.findById(second)
-                .map(House::getSnapshot)
-                .map(HouseSnapshot::pigs)
+        List<Pig> pigs = queryRepository.findDirect(smartPigHouseId)
+                .map(HouseReadModel::getPigs)
                 .get();
-        assertThat(pigs).containsOnly(Pig.VERY_LAZY, Pig.LAZY);
+        assertThat(pigs).containsExactly(Pig.NOT_LAZY, Pig.VERY_LAZY);
+    }
+
+    @Test
+    @DisplayName("pigs should learn after wolf resigned")
+    void wolfResigned_causesPigsLearning() {
+        // given
+        HouseId lazyPigHouseId = commandHandler.handle(new BuildHouse(Pig.VERY_LAZY));
+        // and
+        HouseId smartPigHouseId = commandHandler.handle(new BuildHouse(Pig.NOT_LAZY));
+        // and
+        commandHandler.handle(new BlowDown(lazyPigHouseId));
+
+        // when
+        commandHandler.handle(new BlowDown(smartPigHouseId));
+
+        // then
+        List<Pig> pigs = queryRepository.findDirect(smartPigHouseId)
+                .map(HouseReadModel::getPigs)
+                .get();
+        assertThat(pigs).containsOnly(Pig.NOT_LAZY, Pig.NOT_LAZY_ANYMORE);
     }
 }

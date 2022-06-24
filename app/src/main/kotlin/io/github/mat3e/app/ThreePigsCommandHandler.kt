@@ -39,7 +39,7 @@ open class ThreePigsCommandHandler(
             house
         }
         is Enter -> command.run {
-            pig enter house
+            pigs.forEach { pig -> pig enter house }
             house
         }
         is ShareKnowledge -> command.run {

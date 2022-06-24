@@ -23,20 +23,22 @@ sealed class UpdateCommand(val id: HouseId) : ThreePigsCommand() {
 
 class BlowDown(id: HouseId) : UpdateCommand(id)
 
-class Enter(val pig: Pig, id: HouseId) : UpdateCommand(id) {
+// just for internal events
+
+internal class Enter(val pigs: Collection<Pig>, id: HouseId) : UpdateCommand(id) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Enter) return false
         if (!super.equals(other)) return false
-        if (pig != other.pig) return false
+        if (pigs != other.pigs) return false
         return true
     }
 
     override fun hashCode(): Int {
         var result = super.hashCode()
-        result = 31 * result + pig.hashCode()
+        result = 31 * result + pigs.hashCode()
         return result
     }
 }
 
-class ShareKnowledge(id: HouseId) : UpdateCommand(id)
+internal class ShareKnowledge(id: HouseId) : UpdateCommand(id)
