@@ -1,11 +1,6 @@
 package io.github.mat3e.app
 
-import io.github.mat3e.app.command.BlowDown
-import io.github.mat3e.app.command.BuildHouse
-import io.github.mat3e.app.command.Enter
-import io.github.mat3e.app.command.ShareKnowledge
-import io.github.mat3e.app.command.ThreePigsCommand
-import io.github.mat3e.app.command.UpdateCommand
+import io.github.mat3e.app.command.*
 import io.github.mat3e.model.BigBadWolfService
 import io.github.mat3e.model.House
 import io.github.mat3e.model.HouseFactory
@@ -20,16 +15,6 @@ open class ThreePigsCommandHandler(
         private val factory: HouseFactory,
         private val wolf: BigBadWolfService
 ) {
-    open fun tellTheStory(): List<HouseId> {
-        val firstHouse: HouseId = this handle BuildHouse(Pig.VERY_LAZY)
-        val secondHouse: HouseId = this handle BuildHouse(Pig.LAZY)
-        val thirdHouse: HouseId = this handle BuildHouse(Pig.NOT_LAZY)
-        this handle BlowDown(firstHouse)
-        this handle BlowDown(secondHouse)
-        this handle BlowDown(thirdHouse)
-        return listOf(firstHouse, secondHouse, thirdHouse)
-    }
-
     open infix fun handle(command: ThreePigsCommand): HouseId {
         val house: House = when (command) {
             is BuildHouse -> command.run {
