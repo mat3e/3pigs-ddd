@@ -4,7 +4,7 @@ spring:
     username: 'sa'
     password: ''
   main:
-    web-application-type: none
+    web-application-type: servlet
 
 ---
 spring:
