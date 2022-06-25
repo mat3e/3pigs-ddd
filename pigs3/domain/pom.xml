@@ -6,6 +6,7 @@
         <groupId>io.github.mat3e</groupId>
         <artifactId>3pigs</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>domain</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -62,7 +63,7 @@
     </dependencies>
 
     <build>
-        <testSourceDirectory>${project.basedir}/src/test/groovy</testSourceDirectory>
+        <testSourceDirectory>src/test/groovy</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

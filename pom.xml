@@ -16,9 +16,9 @@
 
     <modules>
         <module>monolith</module>
-        <module>domain</module>
-        <module>app</module>
-        <module>adapters</module>
+        <module>pigs3/domain</module>
+        <module>pigs3/app</module>
+        <module>pigs3/adapters</module>
         <module>lib</module>
     </modules>
 
