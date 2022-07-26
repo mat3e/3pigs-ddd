@@ -11,7 +11,7 @@
     <groupId>io.github.mat3e.tales.pigs3</groupId>
     <artifactId>app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>app</name>
+    <name>pigs3-app</name>
     <description>The Three Little Pigs - application</description>
 
     <properties>

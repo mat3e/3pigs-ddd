@@ -11,7 +11,7 @@
     <groupId>io.github.mat3e.tales.pigs3</groupId>
     <artifactId>adapters</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>adapters</name>
+    <name>pigs3-adapters</name>
     <description>The Three Little Pigs - adapters</description>
 
     <properties>
@@ -26,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.mat3e.tales.pigs3</groupId>
-            <artifactId>app</artifactId>
+            <artifactId>domain</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
