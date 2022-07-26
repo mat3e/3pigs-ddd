@@ -4,10 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.github.mat3e</groupId>
-        <artifactId>3pigs</artifactId>
+        <artifactId>tales</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
+    <groupId>io.github.mat3e.tales.pigs3</groupId>
     <artifactId>domain</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>domain</name>
@@ -37,8 +38,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.mat3e.ddd</groupId>
-            <artifactId>lib</artifactId>
+            <groupId>io.github.mat3e</groupId>
+            <artifactId>ddd-lib</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -8,7 +8,7 @@
         <version>2.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>io.github.mat3e</groupId>
+    <groupId>io.github.mat3e.tales.pigs3</groupId>
     <artifactId>app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>app</name>
@@ -21,9 +21,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.mat3e</groupId>
+            <groupId>io.github.mat3e.tales.pigs3</groupId>
             <artifactId>domain</artifactId>
-            <version>${project.version}</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>

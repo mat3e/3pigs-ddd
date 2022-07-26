@@ -8,11 +8,11 @@
         <version>2.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>io.github.mat3e</groupId>
+    <groupId>io.github.mat3e.tales</groupId>
     <artifactId>monolith</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>monolith</name>
-    <description>The Three Little Pigs - monolith app</description>
+    <description>Fairy Tales - monolith app</description>
 
     <properties>
         <java.version>17</java.version>
@@ -20,9 +20,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.mat3e</groupId>
+            <groupId>io.github.mat3e.tales.pigs3</groupId>
             <artifactId>adapters</artifactId>
-            <version>${project.version}</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>

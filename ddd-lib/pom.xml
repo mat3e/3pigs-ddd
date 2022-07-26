@@ -4,13 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.github.mat3e</groupId>
-        <artifactId>3pigs</artifactId>
+        <artifactId>tales</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>io.github.mat3e.ddd</groupId>
-    <artifactId>lib</artifactId>
+    <artifactId>ddd-lib</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>lib</name>
+    <name>ddd-lib</name>
     <description>A helper library for DDD</description>
 
     <properties>
