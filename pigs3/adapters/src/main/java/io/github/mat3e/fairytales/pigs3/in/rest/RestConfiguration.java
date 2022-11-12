@@ -1,5 +1,6 @@
 package io.github.mat3e.fairytales.pigs3.in.rest;
 
+import io.github.mat3e.fairytales.pigs3.app.HouseReadModel;
 import io.github.mat3e.fairytales.pigs3.app.command.BuildHouse;
 import io.github.mat3e.fairytales.pigs3.model.vo.HouseId;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -15,7 +16,8 @@ class RestConfiguration {
     Jackson2ObjectMapperBuilderCustomizer registerMixIns() {
         return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder
                 .mixIn(BuildHouse.class, BuildHouseJson.class)
-                .mixIn(HouseId.class, HouseIdJson.class);
+                .mixIn(HouseId.class, HouseIdJson.class)
+                .mixIn(HouseReadModel.class, HouseReadModelJson.class);
     }
 }
 
