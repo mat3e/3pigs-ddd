@@ -20,6 +20,7 @@
         <module>pigs3/app</module>
         <module>pigs3/adapters</module>
         <module>ddd-lib</module>
+        <module>redhood</module>
     </modules>
 
     <build>

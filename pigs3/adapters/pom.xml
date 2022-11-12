@@ -12,6 +12,7 @@
     <artifactId>adapters</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>pigs3-adapters</name>
+    <!-- North Star -->
     <description>The Three Little Pigs - adapters</description>
 
     <properties>
