@@ -14,12 +14,13 @@ sealed interface MeetingPolicy {
     Logger logger = LoggerFactory.getLogger(MeetingPolicy.class);
 
     Optional<Person> run();
+
+    default boolean hasFatalConsequencesForWolf() {
+        return false;
+    }
 }
 
 class MeetingPolicyFactory {
-    // todo: fluent api?
-    //  Meetings.with(actualPerson).plannedFor(expectedPerson)
-    //  Meetings.plannedFor(expectedPerson).with(actualPerson)
     static MeetingPolicy policyFor(Person expectedPerson, @Nonnull Person actualPerson) {
         if (requireNonNull(actualPerson) == HUNTSMAN) {
             return new LoosingWolfPolicy();
@@ -34,13 +35,17 @@ class MeetingPolicyFactory {
     }
 
     private static final class LoosingWolfPolicy extends UnplannedMeetingPolicy {
-        // wolf dies
+        @Override
+        public boolean hasFatalConsequencesForWolf() {
+            logger.info("That one was totally unexpected by wolf. He was about being killed!");
+            return true;
+        }
     }
 
     private static sealed class UnplannedMeetingPolicy implements MeetingPolicy {
         @Override
         public Optional<Person> run() {
-            logger.info("This meeting was not planned by wolf, he didn't eat anyone!");
+            logger.info("This meeting was not planned by wolf, he didn't manage to eat anyone!");
             return Optional.empty();
         }
     }
@@ -54,8 +59,7 @@ class MeetingPolicyFactory {
 
         @Override
         public Optional<Person> run() {
-            logger.info("This was what he planned.");
-            // todo: logging here that according to plan, wolf dressed, bla, bla
+            logger.info("That was what he planned.");
             return Optional.of(metPerson);
         }
     }
