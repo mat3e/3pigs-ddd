@@ -62,4 +62,21 @@ class RedHoodTest {
 
         then(query.findById(wolfId)).hasEaten(RED_HOOD, GRANDMA, GRANDMA);
     }
+
+    @Test
+    void wolfWithPlan_differentMeetings_eatsJustSome() {
+        // given
+        int wolfId = command.startInteracting(RED_HOOD, GRANDMA, GRANDMA, RED_HOOD);
+
+        // when mismatching
+        command.meetWolf(GRANDMA, wolfId);
+        // and
+        command.meetWolf(RED_HOOD, wolfId);
+        // and matching
+        command.meetWolf(GRANDMA, wolfId);
+        // and
+        command.meetWolf(RED_HOOD, wolfId);
+
+        then(query.findById(wolfId)).hasEaten(GRANDMA, RED_HOOD);
+    }
 }
