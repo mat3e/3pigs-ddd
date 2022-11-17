@@ -16,10 +16,9 @@ public class InMemoryWolfRepository implements WolfRepository {
         this.idGetter = idGetter;
     }
 
-    public List<Person> findEatenPeople(Integer id) {
+    public Optional<List<Person>> findEatenPeople(Integer id) {
         return findById(id)
-                .map(wolf -> wolf.getSnapshot().alreadyEatenPeople().stream().toList())
-                .orElseThrow();
+                .map(wolf -> wolf.getSnapshot().alreadyEatenPeople().stream().toList());
     }
 
     @Override
@@ -34,5 +33,10 @@ public class InMemoryWolfRepository implements WolfRepository {
         var toSave = Wolf.fromSnapshot(new Wolf.Snapshot(id, source.plannedEatingOrder(), source.alreadyEatenPeople()));
         db.put(id, toSave);
         return toSave;
+    }
+
+    @Override
+    public void deleteById(int wolfId) {
+        db.remove(wolfId);
     }
 }

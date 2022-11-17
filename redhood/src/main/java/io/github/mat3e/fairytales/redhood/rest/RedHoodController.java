@@ -1,6 +1,6 @@
 package io.github.mat3e.fairytales.redhood.rest;
 
-import io.github.mat3e.fairytales.redhood.RedHoodCommandHandler;
+import io.github.mat3e.fairytales.redhood.RedHoodService;
 import io.github.mat3e.fairytales.redhood.query.RedHoodQuery;
 import io.github.mat3e.fairytales.redhood.query.Wolf;
 import jakarta.validation.Valid;
@@ -19,10 +19,10 @@ import static io.github.mat3e.fairytales.redhood.Person.HUNTSMAN;
 @RequestMapping("/wolfs")
 @ConditionalOnProperty(value = "spring.main.web-application-type", havingValue = "servlet")
 class RedHoodController {
-    private final RedHoodCommandHandler commandHandler;
+    private final RedHoodService commandHandler;
     private final RedHoodQuery query;
 
-    RedHoodController(RedHoodCommandHandler commandHandler, RedHoodQuery query) {
+    RedHoodController(RedHoodService commandHandler, RedHoodQuery query) {
         this.commandHandler = commandHandler;
         this.query = query;
     }

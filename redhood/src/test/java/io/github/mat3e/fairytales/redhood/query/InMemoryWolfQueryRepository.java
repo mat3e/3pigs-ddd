@@ -15,7 +15,7 @@ public class InMemoryWolfQueryRepository implements WolfQueryRepository {
 
     @Override
     public Optional<Wolf> findById(int wolfId) {
-        return Optional.of(new WolfImpl(domainRepo.findEatenPeople(wolfId)));
+        return domainRepo.findEatenPeople(wolfId).map(WolfImpl::new);
     }
 
     private record WolfImpl(List<Person> getEatenPeople) implements Wolf {
