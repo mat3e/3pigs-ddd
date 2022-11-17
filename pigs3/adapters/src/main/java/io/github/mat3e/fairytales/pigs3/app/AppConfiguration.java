@@ -6,7 +6,6 @@ import io.github.mat3e.fairytales.pigs3.model.event.HouseEvent;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -33,7 +32,6 @@ class AppConfiguration {
 
 @EnableAsync
 @Configuration
-@Profile("!test")
 @ConditionalOnProperty(value = "spring.main.web-application-type", havingValue = "servlet")
 class AsyncConfiguration {
 }
