@@ -11,16 +11,14 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
-@SpringBootTest(webEnvironment = NONE)
 @Tag("integration")
-@ActiveProfiles("test")
+@SpringBootTest(webEnvironment = NONE)
 class JdbcAdaptersIntegrationTest {
     @Autowired
     private HouseRepository domainRepository;
