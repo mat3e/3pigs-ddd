@@ -18,7 +18,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
-@SpringBootTest(webEnvironment = NONE) // TODO: @DataJdbcTest(properties = "spring.main.web-application-type=none") - ?
+@SpringBootTest(webEnvironment = NONE)
 @Tag("integration")
 @ActiveProfiles("test")
 class JdbcAdaptersIntegrationTest {
