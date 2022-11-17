@@ -3,7 +3,7 @@
 
 [My tech talk](https://github.com/mat3e/talks/tree/master/docs/3pigs), fairy tale sources: [1](https://www.gillbooks.ie/AcuCustom/Sitename/DAM/101/WWSI_OM_0902.pdf), [2](http://www.hellokids.com/c_14958/reading-learning/stories-for-children/animal-stories-for-kids/the-three-little-pigs), [3](https://sacred-texts.com/neu/eng/eft/eft15.htm), [4](https://americanliterature.com/childrens-stories/the-three-little-pigs).
 
-> Java 17, Groovy + Spock, Kotlin, Maven, Spring
+> Java 19, Groovy + Spock, Kotlin, Maven, Spring
 
 ## Web app
 App starts as an ordinary web app for
@@ -58,3 +58,5 @@ An example.
    * `WolfStartedClimbing` should call both `litFire` and `comeDownTheChimneyOf` in a proper order
    * `WolfEscaped` should result in knowledge sharing
 * Full Event Sourcing - `House` can be built just from events, no snapshots in the current form
+* Rely fully on `DomainEventPublisher` - although `@DomainEvents` annotation looks 
+nice, it relies on `ApplicationEventPublisher` which has known limitations, especially without additional tooling like [Spring Modulith](https://spring.io/blog/2022/10/21/introducing-spring-modulith)
