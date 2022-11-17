@@ -1,11 +1,13 @@
 package io.github.mat3e.fairytales.redhood;
 
+import ch.qos.logback.classic.Level;
 import io.github.mat3e.ddd.Aggregate;
 import io.github.mat3e.ddd.vo.EntitySnapshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 class Wolf implements Aggregate<Integer, Wolf.Snapshot> {
     private static final Logger logger = LoggerFactory.getLogger(Wolf.class);
@@ -14,17 +16,28 @@ class Wolf implements Aggregate<Integer, Wolf.Snapshot> {
     private final List<Person> eatenPeople = new ArrayList<>();
 
     static Wolf fromSnapshot(Snapshot snapshot) {
-        var result = new Wolf(snapshot.plannedEatingOrder());
-        result.id = snapshot.id();
-        result.eatenPeople.addAll(snapshot.alreadyEatenPeople());
+        return withInfoLogLevel(() -> {
+            var result = new Wolf(snapshot.plannedEatingOrder());
+            result.id = snapshot.id();
+            result.eatenPeople.addAll(snapshot.alreadyEatenPeople());
+            return result;
+        });
+    }
+
+    private static <T> T withInfoLogLevel(Supplier<T> instruction) {
+        var log = ((ch.qos.logback.classic.Logger) logger);
+        var originalLevel = log.getLevel();
+        log.setLevel(Level.INFO);
+        var result = instruction.get();
+        log.setLevel(originalLevel);
         return result;
     }
 
     Wolf(List<Person> plannedEatingOrder) {
         if (plannedEatingOrder.isEmpty()) {
-            logger.info("He didn't have plans to eat anyone.");
+            logger.debug("He didn't have plans to eat anyone.");
         } else {
-            logger.info("His plan was to eat {}", String.join(" and then ", plannedEatingOrder.stream().map(Object::toString).toList()));
+            logger.debug("His plan was to eat {}.", String.join(" and then ", plannedEatingOrder.stream().map(Object::toString).toList()));
         }
         this.masterPlan = new ActionPlan(inReversedOrder(plannedEatingOrder));
     }
@@ -38,7 +51,7 @@ class Wolf implements Aggregate<Integer, Wolf.Snapshot> {
         Optional<Person> metPerson = meeting.run();
         metPerson.ifPresent(eatenPerson -> {
             eatenPeople.add(eatenPerson);
-            logger.info("And he devoured {}!", eatenPerson);
+            logger.info("So he devoured {}!", eatenPerson);
         });
     }
 
