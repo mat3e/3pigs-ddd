@@ -21,7 +21,7 @@ class RedHoodTest {
             }
         };
         var repo = new InMemoryWolfRepository(wolf -> wolf.getSnapshot().id());
-        command = new RedHoodConfiguration(repo, publisher).commandHandler();
+        command = new RedHoodConfiguration(repo, publisher).redHoodService();
         query = new RedHoodQuery(new InMemoryWolfQueryRepository(repo));
     }
 

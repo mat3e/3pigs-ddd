@@ -8,23 +8,33 @@ import io.github.mat3e.fairytales.redhood.event.WolfEvent;
 import io.github.mat3e.fairytales.redhood.event.WolfKilled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.annotation.AccessType;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.*;
 import java.util.function.Supplier;
 
+import static java.util.stream.Collectors.joining;
+import static org.springframework.data.annotation.AccessType.Type.PROPERTY;
+
+@Table("wolfs")
+@AccessType(PROPERTY)
 class Wolf implements Aggregate<Integer, Wolf.Snapshot> {
     private static final Logger logger = LoggerFactory.getLogger(Wolf.class);
-    private Integer id;
-    private final ActionPlan masterPlan;
-    private final List<Person> eatenPeople = new ArrayList<>();
-    private boolean killed;
-    private final List<WolfEvent> events = new ArrayList<>();
+    private @Id Integer id;
+    private final @Transient ActionPlan masterPlan;
+    private final @Transient List<Person> alreadyEatenPeople = new ArrayList<>();
+    private @Transient boolean killed;
+    private final @Transient List<WolfEvent> events = new ArrayList<>();
 
     static Wolf fromSnapshot(Snapshot snapshot) {
         return withInfoLogLevel(() -> {
             var result = new Wolf(snapshot.plannedEatingOrder());
             result.id = snapshot.id();
-            result.eatenPeople.addAll(snapshot.alreadyEatenPeople());
+            result.alreadyEatenPeople.addAll(snapshot.alreadyEatenPeople());
             return result;
         });
     }
@@ -62,16 +72,16 @@ class Wolf implements Aggregate<Integer, Wolf.Snapshot> {
         }
         Optional<Person> metPerson = meeting.run();
         metPerson.ifPresent(eatenPerson -> {
-            eatenPeople.add(eatenPerson);
+            alreadyEatenPeople.add(eatenPerson);
             logger.info("So he ate {} all up!", eatenPerson);
         });
     }
 
     private void die() {
         if (id != null) {
-            events.add(new WolfKilled(id, eatenPeople));
+            events.add(new WolfKilled(id, alreadyEatenPeople));
         }
-        eatenPeople.clear();
+        alreadyEatenPeople.clear();
         killed = true;
     }
 
@@ -95,8 +105,9 @@ class Wolf implements Aggregate<Integer, Wolf.Snapshot> {
     }
 
     @Override
+    @Transient
     public Snapshot getSnapshot() {
-        return new Snapshot(id, masterPlan.getSnapshot(), eatenPeople, events);
+        return new Snapshot(id, masterPlan.getSnapshot(), alreadyEatenPeople, events);
     }
 
     private static List<Person> inReversedOrder(List<Person> plannedEatingOrder) {
@@ -136,9 +147,28 @@ class Wolf implements Aggregate<Integer, Wolf.Snapshot> {
         }
     }
 
-    static class NotFound extends RuntimeException {
-        NotFound(int wolfId) {
-            super("Wolf " + wolfId + " not found!");
-        }
+    // JDBC
+    public String getPlannedOrder() {
+        return stringify(masterPlan.getSnapshot());
+    }
+
+    // todo: still public in newer Data-JDBC?
+    public String getEatenPeople() {
+        return stringify(alreadyEatenPeople);
+    }
+
+    private String stringify(List<Person> peopleList) {
+        return peopleList.stream().map(Enum::name).collect(joining(","));
+    }
+
+    @PersistenceCreator
+    Wolf(Integer id, List<String> plannedOrder, List<String> eatenPeople) {
+        this(fromStrings(plannedOrder));
+        this.id = id;
+        this.alreadyEatenPeople.addAll(fromStrings(eatenPeople));
+    }
+
+    private static List<Person> fromStrings(List<String> stringList) {
+        return stringList == null ? List.of() : stringList.stream().map(Person::valueOf).toList();
     }
 }

@@ -15,12 +15,16 @@ public class InMemoryWolfQueryRepository implements WolfQueryRepository {
 
     @Override
     public Optional<Wolf> findById(int wolfId) {
-        return domainRepo.findEatenPeople(wolfId).map(WolfImpl::new);
+        return domainRepo.findEatenPeople(wolfId).map(WolfImpl::from);
     }
 
-    private record WolfImpl(List<Person> getEatenPeople) implements Wolf {
+    private record WolfImpl(List<String> getEatenPeople) implements Wolf {
         private WolfImpl {
             getEatenPeople = List.copyOf(getEatenPeople);
+        }
+
+        static WolfImpl from(List<Person> people) {
+            return new WolfImpl(people.stream().map(Enum::name).toList());
         }
     }
 }

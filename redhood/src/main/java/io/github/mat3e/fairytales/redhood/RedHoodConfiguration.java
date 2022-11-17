@@ -15,7 +15,7 @@ class RedHoodConfiguration {
     }
 
     @Bean
-    RedHoodService commandHandler() {
+    RedHoodService redHoodService() {
         return new RedHoodService(wolfRepository, eventPublisher);
     }
 }
