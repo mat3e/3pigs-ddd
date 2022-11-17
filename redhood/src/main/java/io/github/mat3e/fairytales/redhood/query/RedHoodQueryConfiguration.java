@@ -12,7 +12,7 @@ class RedHoodQueryConfiguration {
     }
 
     @Bean
-    RedHoodQuery query() {
+    RedHoodQuery redHoodQuery() {
         return new RedHoodQuery(wolfQueryRepository);
     }
 }

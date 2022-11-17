@@ -17,7 +17,7 @@ class AppConfiguration {
     }
 
     @Bean
-    ThreePigsCommandHandler commandHandler() {
+    ThreePigsCommandHandler threePigsCommandHandler() {
         return app.getCommandHandler();
     }
 

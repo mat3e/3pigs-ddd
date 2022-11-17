@@ -24,7 +24,7 @@ class WolfAssert extends AbstractAssert<WolfAssert, Wolf> {
     }
 
     static WolfAssert then(io.github.mat3e.fairytales.redhood.Wolf wolf) {
-        return new WolfAssert(() -> wolf.getSnapshot().alreadyEatenPeople());
+        return new WolfAssert(() -> wolf.getSnapshot().alreadyEatenPeople().stream().map(Enum::name).toList());
     }
 
     protected WolfAssert(Wolf wolf) {
@@ -38,7 +38,7 @@ class WolfAssert extends AbstractAssert<WolfAssert, Wolf> {
     }
 
     WolfAssert hasEaten(Person... people) {
-        Assertions.assertThat(actual.getEatenPeople()).containsExactly(people);
+        Assertions.assertThat(actual.getEatenPeople()).map(Person::valueOf).containsExactly(people);
         return this;
     }
 }

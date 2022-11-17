@@ -1,0 +1,104 @@
+{
+	"info": {
+		"_postman_id": "9fc49c4b-e94b-4120-9a7a-0f20535e4d4d",
+		"name": "RedHood",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Talk with wolf",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"expectedPeopleToMeet\": [\"GRANDMA\", \"RED_HOOD\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/wolfs",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"wolfs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read wolf",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/wolfs/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"wolfs",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Meet wolf",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"participant\": \"GRANDMA\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/wolfs/1/meetings/recent",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"wolfs",
+						"1",
+						"meetings",
+						"recent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Kill wolf",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/wolfs/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"wolfs",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

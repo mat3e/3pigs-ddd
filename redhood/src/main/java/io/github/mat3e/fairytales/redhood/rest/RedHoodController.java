@@ -10,7 +10,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.Optional;
 
 import static io.github.mat3e.fairytales.redhood.Person.HUNTSMAN;
 
@@ -28,25 +27,26 @@ class RedHoodController {
     }
 
     @PostMapping
-    ResponseEntity<Void> createNewWolf() {
-        var id = 123;
+    ResponseEntity<Void> createNewWolf(@Valid @RequestBody MeetingsOrder meetings) {
+        var id = commandHandler.startInteracting(meetings.expectedPeopleToMeet());
         return ResponseEntity.created(URI.create("/" + id)).build();
     }
 
     @GetMapping("/{wolfId}")
     ResponseEntity<Wolf> readWolf(@PathVariable int wolfId) {
-        return ResponseEntity.of(Optional.empty());
+        return ResponseEntity.of(query.findById(wolfId));
     }
 
     @PutMapping("/{wolfId}/meetings/recent")
-    ResponseEntity<Void> updateWolfMeeting(@PathVariable int wolfId, @Valid @RequestBody Meeting meeting) {
-        // todo: what return type and what to return?
-            return ResponseEntity.noContent().build();
+    ResponseEntity<Wolf> updateWolfMeeting(@PathVariable int wolfId, @Valid @RequestBody Meeting meeting) {
+        commandHandler.meetWolf(meeting.participant(), wolfId);
+        return readWolf(wolfId);
     }
 
     // for convenience
     @DeleteMapping("/{wolfId}")
     ResponseEntity<Void> deleteWolf(@PathVariable int wolfId) {
-        return updateWolfMeeting(wolfId, Meeting.with(HUNTSMAN));
+        updateWolfMeeting(wolfId, Meeting.with(HUNTSMAN));
+        return ResponseEntity.noContent().build();
     }
 }
