@@ -15,8 +15,8 @@
     <description>The Three Little Pigs - domain</description>
 
     <properties>
-        <java.version>19</java.version>
-        <groovy.version>4.0.6</groovy.version>
+        <java.version>21</java.version>
+        <groovy.version>4.0.18</groovy.version>
         <spock.version>2.3-groovy-4.0</spock.version>
 
         <encoding>UTF-8</encoding>
@@ -73,7 +73,7 @@
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
-                <version>2.1.0</version>
+                <version>3.0.2</version>
                 <configuration>
                     <previewFeatures>true</previewFeatures>
                 </configuration>
