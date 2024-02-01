@@ -7,7 +7,7 @@ import io.github.mat3e.fairytales.redhood.query.RedHoodQuery;
 import org.junit.jupiter.api.Test;
 
 import static io.github.mat3e.fairytales.redhood.Person.*;
-import static io.github.mat3e.fairytales.redhood.WolfAssert.*;
+import static io.github.mat3e.fairytales.redhood.BusinessAssert.*;
 
 class RedHoodTest {
     private final RedHoodService command;
@@ -30,7 +30,7 @@ class RedHoodTest {
         // when
         int wolfId = command.startInteracting();
 
-        then(query.findById(wolfId)).hasNotEatenAnyone();
+        thenFoundWith(query, wolfId).hasNotEatenAnyone();
     }
 
     @Test
@@ -41,7 +41,7 @@ class RedHoodTest {
         // when
         command.meetWolf(RED_HOOD, wolfId);
 
-        then(query.findById(wolfId)).hasNotEatenAnyone();
+        thenFoundWith(query, wolfId).hasNotEatenAnyone();
     }
 
     @Test
@@ -52,7 +52,7 @@ class RedHoodTest {
         // when
         command.meetWolf(RED_HOOD, wolfId);
 
-        then(query.findById(wolfId)).hasEaten(RED_HOOD);
+        thenFoundWith(query, wolfId).hasEaten(RED_HOOD);
     }
 
     @Test
@@ -67,7 +67,7 @@ class RedHoodTest {
         // and
         command.meetWolf(GRANDMA, wolfId);
 
-        then(query.findById(wolfId)).hasEaten(RED_HOOD, GRANDMA, GRANDMA);
+        thenFoundWith(query, wolfId).hasEaten(RED_HOOD, GRANDMA, GRANDMA);
     }
 
     @Test
@@ -84,7 +84,7 @@ class RedHoodTest {
         // and
         command.meetWolf(RED_HOOD, wolfId);
 
-        then(query.findById(wolfId)).hasEaten(GRANDMA, RED_HOOD);
+        thenFoundWith(query, wolfId).hasEaten(GRANDMA, RED_HOOD);
     }
 
     @Test
@@ -101,6 +101,6 @@ class RedHoodTest {
         // when
         command.meetWolf(HUNTSMAN, wolfId);
 
-        thenShouldNotExist(query.findById(wolfId));
+        thenShouldNotExist(query, wolfId);
     }
 }
