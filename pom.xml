@@ -46,7 +46,7 @@
                             <include>**/*Spec.*</include>
                             <include>**/*Test.*</include>
                         </includes>
-                        <argLine>--enable-preview --illegal-access=permit</argLine>
+                        <argLine>--enable-preview</argLine>
                     </configuration>
                 </plugin>
             </plugins>

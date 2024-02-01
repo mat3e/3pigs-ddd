@@ -16,8 +16,9 @@
 
     <properties>
         <java.version>21</java.version>
+        <junit.version>5.10.1</junit.version>
         <groovy.version>4.0.18</groovy.version>
-        <spock.version>2.3-groovy-4.0</spock.version>
+        <spock.version>2.4-M1-groovy-4.0</spock.version>
 
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
@@ -27,9 +28,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.spockframework</groupId>
-                <artifactId>spock-bom</artifactId>
-                <version>${spock.version}</version>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -49,16 +50,11 @@
             <version>${groovy.version}</version>
             <type>pom</type>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.codehaus.groovy</groupId>
-                    <artifactId>groovy-ant</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
+            <version>${spock.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -80,7 +76,7 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>addTestSources</goal>
+                            <goal>compile</goal>
                             <goal>compileTests</goal>
                         </goals>
                     </execution>
