@@ -52,12 +52,13 @@ class Wolf implements Aggregate<Integer, Wolf.Snapshot> {
     }
 
     private void logCreation(List<Person> plannedEatingOrder) {
+        logger.info("There was a big bad wolf once, who met a naive girl.");
         if (plannedEatingOrder.isEmpty()) {
-            logger.info("He didn't have plans to eat anyone.");
+            logger.info("He didn't have plans to eat anyone though.");
             return;
         }
         logger.info(
-                "His plan was to eat {}.",
+                "Since the meeting his plan was to eat {}.",
                 String.join(" and then ", plannedEatingOrder.stream().map(Object::toString).toList()));
     }
 
@@ -152,7 +153,6 @@ class Wolf implements Aggregate<Integer, Wolf.Snapshot> {
         return stringify(masterPlan.getSnapshot());
     }
 
-    // todo: still public in newer Data-JDBC?
     public String getEatenPeople() {
         return stringify(alreadyEatenPeople);
     }

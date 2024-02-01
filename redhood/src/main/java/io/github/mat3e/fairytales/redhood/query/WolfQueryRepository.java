@@ -12,7 +12,7 @@ interface WolfQueryRepository {
 }
 
 @Table("wolfs")
-class WolfEntity implements Wolf { // todo: sth changed in projections? Doesn't work w/o "implements"
+class WolfEntity {
     @Id
     private final Integer id;
     private final List<String> eatenPeople;
