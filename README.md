@@ -3,7 +3,7 @@
 
 [My tech talk](https://github.com/mat3e/talks/tree/master/docs/3pigs), fairy tale sources: [1](https://www.gillbooks.ie/AcuCustom/Sitename/DAM/101/WWSI_OM_0902.pdf), [2](http://www.hellokids.com/c_14958/reading-learning/stories-for-children/animal-stories-for-kids/the-three-little-pigs), [3](https://sacred-texts.com/neu/eng/eft/eft15.htm), [4](https://americanliterature.com/childrens-stories/the-three-little-pigs).
 
-> Java 19, Groovy + Spock, Kotlin, Maven, Spring
+> Java, Groovy + Spock, Kotlin, Maven, Spring
 
 ## Web app
 App starts as an ordinary web app for
