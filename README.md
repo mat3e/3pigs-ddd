@@ -91,4 +91,4 @@ intentions.
   like [Spring Modulith](https://spring.io/blog/2022/10/21/introducing-spring-modulith)
 * Instead of "technical" packages corresponding with Clean Architecture and DDD, there could be more process-oriented
   packages, like `building` (or `construcitng`) and `destroying`, where the domain logic would lay, similar as presented
-  in [this great tech talk](https://www.youtube.com/watch?v=H7HWOlANX78)
+  in [this great tech talk by Victor Rentea](https://www.youtube.com/watch?v=H7HWOlANX78)
