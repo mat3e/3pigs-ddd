@@ -1,6 +1,5 @@
 package io.github.mat3e.fairytales.redhood;
 
-import ch.qos.logback.classic.Level;
 import io.github.mat3e.ddd.Aggregate;
 import io.github.mat3e.ddd.event.DomainEvent;
 import io.github.mat3e.ddd.event.SnapshotWithEvents;
@@ -14,8 +13,12 @@ import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Stack;
 
 import static java.util.stream.Collectors.joining;
 import static org.springframework.data.annotation.AccessType.Type.PROPERTY;
@@ -31,34 +34,31 @@ class Wolf implements Aggregate<Integer, Wolf.Snapshot> {
     private final @Transient List<WolfEvent> events = new ArrayList<>();
 
     static Wolf fromSnapshot(Snapshot snapshot) {
-        return withInfoLogLevel(() -> {
-            var result = new Wolf(snapshot.plannedEatingOrder());
-            result.id = snapshot.id();
-            result.alreadyEatenPeople.addAll(snapshot.alreadyEatenPeople());
-            return result;
-        });
-    }
-
-    private static <T> T withInfoLogLevel(Supplier<T> instruction) {
-        var log = ((ch.qos.logback.classic.Logger) logger);
-        var originalLevel = log.getLevel();
-        log.setLevel(Level.INFO);
-        var result = instruction.get();
-        log.setLevel(originalLevel);
+        var result = new Wolf(snapshot.plannedEatingOrder(), true);
+        result.id = snapshot.id();
+        result.alreadyEatenPeople.addAll(snapshot.alreadyEatenPeople());
         return result;
     }
 
     Wolf(List<Person> plannedEatingOrder) {
-        logCreation(plannedEatingOrder);
+        this(plannedEatingOrder, false);
+    }
+
+    private Wolf(List<Person> plannedEatingOrder, boolean skipLogging) {
+        if (!skipLogging) {
+            logCreation(plannedEatingOrder);
+        }
         this.masterPlan = new ActionPlan(inReversedOrder(plannedEatingOrder));
     }
 
     private void logCreation(List<Person> plannedEatingOrder) {
         if (plannedEatingOrder.isEmpty()) {
-            logger.debug("He didn't have plans to eat anyone.");
+            logger.info("He didn't have plans to eat anyone.");
             return;
         }
-        logger.debug("His plan was to eat {}.", String.join(" and then ", plannedEatingOrder.stream().map(Object::toString).toList()));
+        logger.info(
+                "His plan was to eat {}.",
+                String.join(" and then ", plannedEatingOrder.stream().map(Object::toString).toList()));
     }
 
     void meet(Person aPerson) {
@@ -163,7 +163,7 @@ class Wolf implements Aggregate<Integer, Wolf.Snapshot> {
 
     @PersistenceCreator
     Wolf(Integer id, List<String> plannedOrder, List<String> eatenPeople) {
-        this(fromStrings(plannedOrder));
+        this(fromStrings(plannedOrder), true);
         this.id = id;
         this.alreadyEatenPeople.addAll(fromStrings(eatenPeople));
     }
