@@ -25,7 +25,7 @@ class MeetingPolicyFactory {
         if (requireNonNull(actualPerson) == HUNTSMAN) {
             return new LoosingWolfPolicy();
         }
-        if (expectedPerson == null || expectedPerson != actualPerson) {
+        if (expectedPerson != actualPerson) {
             return new UnplannedMeetingPolicy();
         }
         return new AsPlannedMeetingPolicy(actualPerson);
