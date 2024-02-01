@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static io.github.mat3e.fairytales.redhood.BusinessAssert.then;
 import static io.github.mat3e.fairytales.redhood.Person.GRANDMA;
 import static io.github.mat3e.fairytales.redhood.Person.HUNTSMAN;
-import static io.github.mat3e.fairytales.redhood.WolfAssert.then;
 
 class WolfTest {
     @Test
