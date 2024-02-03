@@ -6,7 +6,7 @@ sources: [1](https://www.gillbooks.ie/AcuCustom/Sitename/DAM/101/WWSI_OM_0902.pd
 > Java, Groovy + Spock, Kotlin, Maven, Spring
 
 The main focus should be on _The Three Little Pigs_, but to show an alternative, more pragmatic approach there is also
-_The Red Riding Hood_ module, utilizing package-private access more, close to what's presented
+_Little Red Riding Hood_ module, utilizing package-private access more, close to what's presented
 in [this great tech talk by Jakub Nabrdalik](https://www.youtube.com/watch?v=KrLFs6f2bOA).
 
 ## Web app
@@ -38,7 +38,7 @@ Available operations:
 There is a dedicated [Postman](https://www.postman.com/) collection with all these operations already
 defined: `pigs3/adapters/src/main/resources/3Pigs.postman_collection.json`.
 
-### _The Red Riding Hood_
+### _Little Red Riding Hood_
 
 There is a dedicated [Postman](https://www.postman.com/) collection with all the operations ready to
 use: `redhood/src/main/resources/RedHood.postman_collection.json`.
